@@ -1,0 +1,34 @@
+{
+  "short_name": "Vaxport",
+  "name": "Vaccine Passport",
+  "icons": [
+    {
+      "src": "/TODO",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/TODO",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#3367D6",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#3367D6",
+  "description": "TODO",
+  "screenshots": [
+    {
+      "src": "/TODO",
+      "type": "image/png",
+      "sizes": "540x720"
+    },
+    {
+      "src": "/TODO",
+      "type": "image/jpg",
+      "sizes": "540x720"
+    }
+  ]
+}
