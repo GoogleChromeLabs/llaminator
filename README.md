@@ -1,39 +1,27 @@
-# Vaccine Passport
+# ${APP_NAME}
 
-It's a WebAPK where you can "upload" an image (to Chrome storage, not to a
-server) and then it'll have an icon for it directly on your homescreen, even
-when offline. Inspired by http://g/mwi-team-core/CWXjMbjy7bk.
+${APP_NAME} is an installable, fully offline-enabled PWA that helps you
+conveniently store and easily access images directly from your browser, desktop,
+or home screen.
 
-## Goals / Requirements
+## Features
 
-* very good lighthouse score
-* works 100% offline
-* dependency-free (as much as possible)
-  * it should be feasible for a single SWE to audit our code and confirm that
-    we're not uploading your data anywhere
-* installable WebAPK (obviously)
-* looks nice (or at least _okay_)
-* static (can be hosted on github or locally with `python3 -m http.server`)
-* open-source (eventually)
-* maskable icons
-* description, screenshots -> rich install
+* Small: barely any storage space or network traffic required.
+* Convenient: installable and accessible directly from your desktop or home
+  screen.
+* Offline: after the initial visit, ${APP_NAME} works without any mobile or
+  internet connection.
+* Easy: no complicated configuration or confusing interface. Just open
+  ${APP_NAME} and view your image.
 
-## Possibilities and future enhancements
+## Running ${APP_NAME}
 
-* dark mode
-* beforeinstallprompt customization
-* websharetarget?? Potentially confusing and misusable
-* typescript? such a pain to set up, though
-* add name for image -> serve dynamic manifestURL, startURL, ShortName, etc, so
-  you can have multiple instances of the app (ie, make it a generic "host image
-  on your home screen" app rather than necessarily vaccine-related)
-  * I'm not aware of any WebAPK that intentionally allows the user to install
-    multiple customized instances of itself - could be interesting WebAPK
-    use-case in general
-* TWA? Doesn't fit as well into the "multiple instances of the app" model
+${APP_NAME} is currently made of entirely static code, so there's no complicated
+server setup necessary. You can use any http server to host the files.
 
-## Non-goals
+For example, you could run the following and then access ${APP_NAME} at
+`http://localhost:4629`:
 
-* works on every browser everywhere
-  * I know I'm a bad WebPlatform person now, but I'm ok if this only works on
-    reasonably modern browsers. No huge complex polyfills should be necessary.
+```
+python3 -m http.server 4629
+```
