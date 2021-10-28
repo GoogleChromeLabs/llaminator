@@ -1,6 +1,6 @@
-# ${APP_NAME}
+# Llaminator
 
-${APP_NAME} is an installable, fully offline-enabled PWA that helps you
+Llaminator is an installable, fully offline-enabled PWA that helps you
 conveniently store and easily access images directly from your browser, desktop,
 or home screen.
 
@@ -9,17 +9,17 @@ or home screen.
 * Small: barely any storage space or network traffic required.
 * Convenient: installable and accessible directly from your desktop or home
   screen.
-* Offline: after the initial visit, ${APP_NAME} works without any mobile or
+* Offline: after the initial visit, Llaminator works without any mobile or
   internet connection.
 * Easy: no complicated configuration or confusing interface. Just open
-  ${APP_NAME} and view your image.
+  Llaminator and view your image.
 
-## Running ${APP_NAME}
+## Running Llaminator
 
-${APP_NAME} is currently made of entirely static code, so there's no complicated
+Llaminator is currently made of entirely static code, so there's no complicated
 server setup necessary. You can use any http server to host the files.
 
-For example, you could run the following and then access ${APP_NAME} at
+For example, you could run the following and then access Llaminator at
 `http://localhost:4629`:
 
 ```
