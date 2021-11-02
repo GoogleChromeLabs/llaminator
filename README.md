@@ -25,3 +25,11 @@ For example, you could run the following and then access Llaminator at
 ```
 python3 -m http.server 4629
 ```
+
+## Contributing
+
+See [CONTRIBUTING](./CONTRIBUTING.md) for more.
+
+## License
+
+See [LICENSE](./LICENSE) for more.
