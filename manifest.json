@@ -30,5 +30,21 @@
       "type": "image/jpg",
       "sizes": "540x720"
     }
-  ]
+  ],
+  "share_target": {
+    "action": "/share-target",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "url": "url",
+      "text": "text",
+      "files": [
+        {
+          "name": "image",
+          "accept": ["image/*"]
+        }
+      ]
+    }
+  }
 }
