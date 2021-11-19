@@ -29,11 +29,12 @@ const mainImageName = 'mainImage';
 window.addEventListener('load', () => {
   const fileInput = document.querySelector('#input');
   const imgElement = document.querySelector('img');
+  const shareBtn = document.querySelector('#share');
 
   if (!window.indexedDB || !window.URL) { /* TODO: display error message */ }
 
   const dbOpenRequest = window.indexedDB.open(mainDBName);
-  dbOpenRequest.addEventListener('success', (e) => onDBOpenSuccess(e, imgElement));
+  dbOpenRequest.addEventListener('success', (e) => onDBOpenSuccess(e, imgElement, shareBtn));
   dbOpenRequest.addEventListener('error', (e) => {
     console.log('error loading db:', e);
     // TODO: display error
@@ -43,10 +44,16 @@ window.addEventListener('load', () => {
     e.target.result.createObjectStore(objStoreName);
   });
 
-  fileInput.addEventListener('change', (e) => onFileInputChange(e, dbOpenRequest, imgElement));
+  fileInput.addEventListener('change', (e) => onFileInputChange(e, dbOpenRequest, imgElement, shareBtn));
+
+  shareBtn.addEventListener('click', async () => {
+    const blob = await fetch(imgElement.src).then(r => r.blob());
+    const f = fileFromBlob(blob);
+    navigator.share({files: [f]});
+  });
 });
 
-function onDBOpenSuccess(e, imgElement) {
+function onDBOpenSuccess(e, imgElement, shareBtn) {
   console.log('Database initialized');
 
   const db = e.target.result;
@@ -56,19 +63,21 @@ function onDBOpenSuccess(e, imgElement) {
     const b = e.target.result;
     if (!b) return;
     imgElement.src = window.URL.createObjectURL(b);
+    displayIfShareEnabled(shareBtn, b);
   });
   t.addEventListener('error', (e) => {
     console.log('get error:', e)
   });
 }
 
-async function onFileInputChange(e, dbOpenRequest, imgElement) {
+async function onFileInputChange(e, dbOpenRequest, imgElement, shareBtn) {
   console.log(e.target.value);
   if (e.target.files.length === 0) return;
   const f = e.target.files[0]; // TODO: null-check
   const b = new Blob([await f.arrayBuffer()]);
   // TODO: perhaps prompt before silently replacing old image, if one exists?
   imgElement.src = window.URL.createObjectURL(b);
+  displayIfShareEnabled(shareBtn, b);
   const t = dbOpenRequest.result.transaction(objStoreName, 'readwrite').objectStore(objStoreName).put(b, mainImageName);
   // TODO: display "saving..." message/spinner?
   t.addEventListener('success', (e) => {
@@ -79,4 +88,17 @@ async function onFileInputChange(e, dbOpenRequest, imgElement) {
     // TODO: display error
   });
   // TODO: add option to remove from storage
+}
+
+function displayIfShareEnabled(target, blob) {
+  const f = fileFromBlob(blob);
+  if (navigator.share && navigator.canShare &&
+      navigator.canShare({files: [f]})) {
+    target.style.display = 'block';
+  }
+}
+
+function fileFromBlob(blob) {
+  return new File([blob], "name.png" /* TODO - name? Maybe we should be storing a File instead of a Blob? */,
+    {type: "image/png"});
 }
