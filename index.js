@@ -66,7 +66,7 @@ async function onFileInputChange(e, dbOpenRequest, imgElement) {
   console.log(e.target.value);
   if (e.target.files.length === 0) return;
   const f = e.target.files[0]; // TODO: null-check
-  const b = new Blob([await f.arrayBuffer()]);
+  const b = new Blob([await f.arrayBuffer()], { type: f.type });
   // TODO: perhaps prompt before silently replacing old image, if one exists?
   imgElement.src = window.URL.createObjectURL(b);
   const t = dbOpenRequest.result.transaction(objStoreName, 'readwrite').objectStore(objStoreName).put(b, mainImageName);
