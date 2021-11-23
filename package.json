@@ -1,0 +1,13 @@
+{
+  "name": "llaminator",
+  "version": "0.0.1",
+  "description": "Llaminator helps you store and access images directly from your browser.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/GoogleChromeLabs/llaminator/issues"
+  }
+}
