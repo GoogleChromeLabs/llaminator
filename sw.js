@@ -19,6 +19,10 @@ importScripts(workboxAddr);
 
 const cacheName = 'app-cache';
 
+const mainDBName = 'appDB';
+const objStoreName = 'imageStore';
+const mainImageName = 'mainImage';
+
 self.addEventListener('install', function (event) {
   // precache all assets
   event.waitUntil(
@@ -34,6 +38,54 @@ self.addEventListener('install', function (event) {
     }),
   );
 });
+
+workbox.routing.registerRoute(
+  ({url}) => url.pathname === '/share-target',
+  async ({request}) => {
+    const data = await request.formData();
+
+    if (!indexedDB) { /* TODO: display error message */ }
+
+    let dbOpenRequest = null;
+    await new Promise((resolve, reject) => {
+      // TODO: consider using https://github.com/jakearchibald/idb
+      dbOpenRequest = indexedDB.open(mainDBName);
+      dbOpenRequest.addEventListener('success', () => {
+        console.log('Database initialized');
+        resolve();
+      });
+      dbOpenRequest.addEventListener('error', (e) => {
+        console.log('error loading db:', e);
+        // TODO: display error
+        reject();
+      });
+      dbOpenRequest.addEventListener('upgradeneeded', (e) => {
+        console.log(`DB update request:`, e);
+        e.target.result.createObjectStore(objStoreName);
+      });
+    });
+
+    // TODO: handle invalid share
+    storeFile(data.get('image'), dbOpenRequest);
+    return Response.redirect('/index.html', 302);
+  },
+  'POST'
+);
+
+async function storeFile(f, dbOpenRequest) {
+  const b = new Blob([await f.arrayBuffer()]);
+  // TODO: perhaps prompt before silently replacing old image, if one exists?
+  const t = dbOpenRequest.result.transaction(objStoreName, 'readwrite').objectStore(objStoreName).put(b, mainImageName);
+  // TODO: display "saving..." message/spinner?
+  t.addEventListener('success', (e) => {
+    console.log('put success:', e)
+  });
+  t.addEventListener('error', (e) => {
+    console.log('put error:', e)
+    // TODO: display error
+  });
+  // TODO: add option to remove from storage
+}
 
 workbox.routing.registerRoute(
   ({url}) => true,
