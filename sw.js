@@ -73,7 +73,7 @@ workbox.routing.registerRoute(
 );
 
 async function storeFile(f, dbOpenRequest) {
-  const b = new Blob([await f.arrayBuffer()]);
+  const b = new Blob([await f.arrayBuffer()], { type: f.type });
   // TODO: perhaps prompt before silently replacing old image, if one exists?
   const t = dbOpenRequest.result.transaction(objStoreName, 'readwrite').objectStore(objStoreName).put(b, mainImageName);
   // TODO: display "saving..." message/spinner?
