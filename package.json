@@ -11,6 +11,8 @@
     "url": "https://github.com/GoogleChromeLabs/llaminator/issues"
   },
   "devDependencies": {
-    "@web/dev-server": "^0.1.28"
+    "@web/dev-server": "^0.1.28",
+    "@web/dev-server-esbuild": "^0.2.16",
+    "typescript": "^4.5.2"
   }
 }
