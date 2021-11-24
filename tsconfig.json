@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ES2019",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "esModuleInterop": false,
+    "noEmitOnError": true,
+    "lib": ["esnext", "dom", "dom.iterable"],
+    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./",
+    "rootDir": "./",
+    "outDir": ".tmp/ts",
+  },
+  "include": ["src/**/*.ts"]
+}

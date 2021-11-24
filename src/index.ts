@@ -27,9 +27,9 @@ const objStoreName = 'imageStore';
 const mainImageName = 'mainImage';
 
 window.addEventListener('load', () => {
-  const fileInput = document.querySelector('#input');
-  const imgElement = document.querySelector('img');
-  const shareBtn = document.querySelector('#share');
+  const fileInput = document.querySelector('#input') as HTMLInputElement;
+  const imgElement = document.querySelector('img') as HTMLImageElement;
+  const shareBtn = document.querySelector('#share') as HTMLButtonElement;
 
   if (!window.indexedDB || !window.URL) { /* TODO: display error message */ }
 
@@ -41,7 +41,7 @@ window.addEventListener('load', () => {
   });
   dbOpenRequest.addEventListener('upgradeneeded', (e) => {
     console.log(`DB update request:`, e);
-    e.target.result.createObjectStore(objStoreName);
+    (e.target as IDBRequest).result.createObjectStore(objStoreName);
   });
 
   fileInput.addEventListener('change', (e) => onFileInputChange(e, dbOpenRequest, imgElement, shareBtn));
@@ -53,27 +53,29 @@ window.addEventListener('load', () => {
   });
 });
 
-function onDBOpenSuccess(e, imgElement, shareBtn) {
+function onDBOpenSuccess(e: Event, imgElement: HTMLImageElement, shareBtn: HTMLButtonElement) {
   console.log('Database initialized');
 
-  const db = e.target.result;
+  const db = (e.target as IDBRequest).result;
   const t = db.transaction(objStoreName, 'readonly').objectStore(objStoreName).get(mainImageName);
-  t.addEventListener('success', (e) => {
+  t.addEventListener('success', (e: Event) => {
     console.log('get success:', e)
-    const b = e.target.result;
+    const b = (e.target as IDBRequest).result;
     if (!b) return;
     imgElement.src = window.URL.createObjectURL(b);
     displayIfShareEnabled(shareBtn, b);
   });
-  t.addEventListener('error', (e) => {
+  t.addEventListener('error', (e: Event) => {
     console.log('get error:', e)
   });
 }
 
-async function onFileInputChange(e, dbOpenRequest, imgElement, shareBtn) {
-  console.log(e.target.value);
-  if (e.target.files.length === 0) return;
-  const f = e.target.files[0]; // TODO: null-check
+async function onFileInputChange(e: Event, dbOpenRequest: IDBOpenDBRequest, imgElement: HTMLImageElement, shareBtn: HTMLButtonElement) {
+  const inputElement = e.target as HTMLInputElement;
+
+  console.log(inputElement.value);
+  if (!inputElement.files || !inputElement.files.length) return;
+  const f = inputElement.files[0]; // TODO: null-check
   const b = new Blob([await f.arrayBuffer()], { type: f.type });
   // TODO: perhaps prompt before silently replacing old image, if one exists?
   imgElement.src = window.URL.createObjectURL(b);
@@ -90,15 +92,16 @@ async function onFileInputChange(e, dbOpenRequest, imgElement, shareBtn) {
   // TODO: add option to remove from storage
 }
 
-function displayIfShareEnabled(target, blob) {
+function displayIfShareEnabled(target: HTMLElement, blob: Blob): void {
   const f = fileFromBlob(blob);
-  if (navigator.share && navigator.canShare &&
+  if (navigator.hasOwnProperty('share') && navigator.hasOwnProperty('canShare') &&
+      /** @ts-ignore navigator.canShare isn't included in TypeScript's IDL? */
       navigator.canShare({files: [f]})) {
     target.style.display = 'block';
   }
 }
 
-function fileFromBlob(blob) {
+function fileFromBlob(blob: Blob): File {
   return new File([blob], "name.png" /* TODO - name? Maybe we should be storing a File instead of a Blob? */,
     {type: "image/png"});
 }
