@@ -23,7 +23,7 @@ For example, you could run the following and then access Llaminator at
 `http://localhost:4629`:
 
 ```
-python3 -m http.server 4629
+npm run-script serve
 ```
 
 ## Contributing
