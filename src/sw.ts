@@ -30,18 +30,18 @@ self.addEventListener('install', function (event): void {
   (event as InstallEvent).waitUntil(
     caches.open(cacheName).then(function (cache) {
       return cache.addAll([
-        '/src/',
-        '/src/index.html',
-        '/src/index.ts',
-        '/src/manifest.json',
-        '/src/sw.ts',
+        '__APP_ROOT__/',
+        '__APP_ROOT__/index.html',
+        '__APP_ROOT__/index.ts',
+        '__APP_ROOT__/manifest.json',
+        '__APP_ROOT__/sw.ts',
       ]);
     }),
   );
 });
 
 registerRoute(
-  ({url}) => url.pathname === '/share-target',
+  ({url}) => url.pathname === '__APP_ROOT__/share-target',
   async ({request}) => {
     const data = await request.formData();
 
@@ -68,7 +68,7 @@ registerRoute(
 
     // TODO: handle invalid share
     storeFile(data.get('image') as File, dbOpenRequest!);
-    return Response.redirect('/index.html', 302);
+    return Response.redirect('__APP_ROOT__/index.html', 302);
   },
   'POST'
 );
