@@ -14,6 +14,17 @@ or home screen.
 * Easy: no complicated configuration or confusing interface. Just open
   Llaminator and view your image.
 
+## Installing and building Llaminator
+
+[NPM and Node.js](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+are used by Llaminator for dependency management, and have to be available on
+the host operating system. After checking out this repository, initialize your
+environment by running:
+
+```
+npm install
+```
+
 ## Running Llaminator
 
 Llaminator is currently made of entirely static code, so there's no complicated
