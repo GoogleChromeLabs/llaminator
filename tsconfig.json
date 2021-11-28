@@ -5,7 +5,7 @@
     "moduleResolution": "node",
     "esModuleInterop": false,
     "noEmitOnError": true,
-    "lib": ["esnext", "dom", "dom.iterable"],
+    "lib": ["esnext", "dom", "dom.iterable", "webworker"],
     "strict": true,
     "baseUrl": "./",
     "rootDir": "./",
