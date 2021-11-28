@@ -27,7 +27,7 @@ declare var self: ServiceWorkerGlobalScope;
 
 self.addEventListener('install', function (event): void {
   // precache all assets
-  event.waitUntil(
+  (event as InstallEvent).waitUntil(
     caches.open(cacheName).then(function (cache) {
       return cache.addAll([
         '/src/',
