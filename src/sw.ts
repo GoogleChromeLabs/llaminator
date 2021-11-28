@@ -23,13 +23,11 @@ const mainDBName = 'appDB';
 const objStoreName = 'imageStore';
 const mainImageName = 'mainImage';
 
-interface InstallEvent extends Event {
-  waitUntil: (promise: Promise<any>) => void;
-};
+declare var self: ServiceWorkerGlobalScope;
 
-self.addEventListener('install', function (event: Event): void {
+self.addEventListener('install', function (event): void {
   // precache all assets
-  (event as InstallEvent).waitUntil(
+  event.waitUntil(
     caches.open(cacheName).then(function (cache) {
       return cache.addAll([
         '/src/',
