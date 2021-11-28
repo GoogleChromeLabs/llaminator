@@ -14,16 +14,13 @@
  *  limitations under the License.
  */
 
-import { esbuildPlugin } from '@web/dev-server-esbuild';
-import { fromRollup } from '@web/dev-server-rollup';
-import { replaceConfig } from './build_common.mjs';
-import rollupReplace from '@rollup/plugin-replace';
+function replaceConfig(root) {
+  return {
+    preventAssignment: true,
+    values: {
+      '__APP_ROOT__': root,
+    },
+  };
+}
 
-const replace = fromRollup(rollupReplace);
-
-export default {
-  plugins: [
-    replace(replaceConfig('/src')),
-    esbuildPlugin({ ts: true })
-  ],
-};
+export { replaceConfig }
