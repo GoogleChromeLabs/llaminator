@@ -37,6 +37,18 @@ For example, you could run the following and then access Llaminator at
 npm run-script serve
 ```
 
+## Exporting Llaminator as a static site (dev mode)
+
+To compile the typescript, resolve node dependencies, etc, and
+dump the output into `dist_dev/`, you can run:
+
+```
+npm run-script export-dev
+```
+
+Note: this probably won't be part of our typical development workflow,
+so expect it to break from time to time.
+
 ## Contributing
 
 See [CONTRIBUTING](./CONTRIBUTING.md) for more.
