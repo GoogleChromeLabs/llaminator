@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "description": "Llaminator helps you store and access images directly from your browser.",
   "scripts": {
-    "serve": "wds --node-resolve --watch --port 4629 --open src/"
+    "serve": "wds --node-resolve --watch --port 4629 --open src/",
+    "export-dev": "rollup -c rollup.config.export-dev.mjs"
   },
   "author": "",
   "license": "Apache-2.0",
@@ -11,9 +12,14 @@
     "url": "https://github.com/GoogleChromeLabs/llaminator/issues"
   },
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^13.0.6",
     "@rollup/plugin-replace": "^3.0.0",
     "@web/dev-server": "^0.1.28",
     "@web/dev-server-esbuild": "^0.2.16",
+    "rollup": "^2.60.1",
+    "rollup-plugin-clear": "^2.0.7",
+    "rollup-plugin-copy": "^3.4.0",
+    "rollup-plugin-esbuild": "^4.7.2",
     "typescript": "^4.5.2"
   },
   "dependencies": {
