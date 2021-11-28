@@ -13,10 +13,10 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": "/",
+  "start_url": ".",
   "background_color": "#3367D6",
   "display": "standalone",
-  "scope": "/",
+  "scope": ".",
   "theme_color": "#3367D6",
   "description": "TODO",
   "screenshots": [
@@ -32,7 +32,7 @@
     }
   ],
   "share_target": {
-    "action": "/share-target",
+    "action": "share-target",
     "method": "POST",
     "enctype": "multipart/form-data",
     "params": {

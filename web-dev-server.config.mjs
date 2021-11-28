@@ -15,7 +15,19 @@
  */
 
 import { esbuildPlugin } from '@web/dev-server-esbuild';
+import { fromRollup } from '@web/dev-server-rollup';
+import rollupReplace from '@rollup/plugin-replace';
+
+const replace = fromRollup(rollupReplace);
 
 export default {
-  plugins: [ esbuildPlugin({ ts: true }) ],
+  plugins: [
+    replace({
+      preventAssignment: true,
+      values: {
+        '__APP_ROOT__': '/src'
+      }
+    }),
+    esbuildPlugin({ ts: true })
+  ],
 };

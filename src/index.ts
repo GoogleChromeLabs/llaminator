@@ -16,7 +16,7 @@
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.ts');
+    navigator.serviceWorker.register('__APP_ROOT__/sw.ts');
   });
 } else {
   // TODO display error message and fail gracefully
