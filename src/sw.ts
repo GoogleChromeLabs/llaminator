@@ -32,11 +32,11 @@ self.addEventListener('install', function (event: Event): void {
   (event as InstallEvent).waitUntil(
     caches.open(cacheName).then(function (cache) {
       return cache.addAll([
-        '/',
-        '/index.html',
-        '/index.ts',
-        '/manifest.json',
-        '/sw.ts',
+        '/src/',
+        '/src/index.html',
+        '/src/index.ts',
+        '/src/manifest.json',
+        '/src/sw.ts',
       ]);
     }),
   );
