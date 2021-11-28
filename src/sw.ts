@@ -14,8 +14,8 @@
  *  limitations under the License.
  */
 
-const workboxAddr = 'https://storage.googleapis.com/workbox-cdn/releases/6.2.0/workbox-sw.js'; // TODO: host this file in this project?
-importScripts(workboxAddr);
+import { registerRoute } from 'workbox-routing';
+import { StaleWhileRevalidate } from 'workbox-strategies';
 
 const cacheName = 'app-cache';
 
@@ -23,31 +23,34 @@ const mainDBName = 'appDB';
 const objStoreName = 'imageStore';
 const mainImageName = 'mainImage';
 
-self.addEventListener('install', function (event) {
+interface InstallEvent extends Event {
+  waitUntil: (promise: Promise<any>) => void;
+};
+
+self.addEventListener('install', function (event: Event): void {
   // precache all assets
-  event.waitUntil(
+  (event as InstallEvent).waitUntil(
     caches.open(cacheName).then(function (cache) {
       return cache.addAll([
-        workboxAddr, // TODO: is this actually necessary?
         '/',
         '/index.html',
-        '/index.js',
+        '/index.ts',
         '/manifest.json',
-        '/sw.js',
+        '/sw.ts',
       ]);
     }),
   );
 });
 
-workbox.routing.registerRoute(
+registerRoute(
   ({url}) => url.pathname === '/share-target',
   async ({request}) => {
     const data = await request.formData();
 
     if (!indexedDB) { /* TODO: display error message */ }
 
-    let dbOpenRequest = null;
-    await new Promise((resolve, reject) => {
+    let dbOpenRequest: IDBOpenDBRequest | null = null;
+    await new Promise<void>((resolve, reject) => {
       // TODO: consider using https://github.com/jakearchibald/idb
       dbOpenRequest = indexedDB.open(mainDBName);
       dbOpenRequest.addEventListener('success', () => {
@@ -59,37 +62,37 @@ workbox.routing.registerRoute(
         // TODO: display error
         reject();
       });
-      dbOpenRequest.addEventListener('upgradeneeded', (e) => {
+      dbOpenRequest.addEventListener('upgradeneeded', (e: IDBVersionChangeEvent) => {
         console.log(`DB update request:`, e);
-        e.target.result.createObjectStore(objStoreName);
+        (e.target as IDBOpenDBRequest).result.createObjectStore(objStoreName);
       });
     });
 
     // TODO: handle invalid share
-    storeFile(data.get('image'), dbOpenRequest);
+    storeFile(data.get('image') as File, dbOpenRequest!);
     return Response.redirect('/index.html', 302);
   },
   'POST'
 );
 
-async function storeFile(f, dbOpenRequest) {
+async function storeFile(f: File, dbOpenRequest: IDBOpenDBRequest) {
   const b = new Blob([await f.arrayBuffer()], { type: f.type });
   // TODO: perhaps prompt before silently replacing old image, if one exists?
   const t = dbOpenRequest.result.transaction(objStoreName, 'readwrite').objectStore(objStoreName).put(b, mainImageName);
   // TODO: display "saving..." message/spinner?
-  t.addEventListener('success', (e) => {
+  t.addEventListener('success', (e: Event) => {
     console.log('put success:', e)
   });
-  t.addEventListener('error', (e) => {
+  t.addEventListener('error', (e: Event) => {
     console.log('put error:', e)
     // TODO: display error
   });
   // TODO: add option to remove from storage
 }
 
-workbox.routing.registerRoute(
+registerRoute(
   ({url}) => true,
-  new workbox.strategies.StaleWhileRevalidate({
+  new StaleWhileRevalidate({
     cacheName: cacheName
   })
 );
