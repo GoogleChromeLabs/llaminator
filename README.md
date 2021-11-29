@@ -37,10 +37,10 @@ For example, you could run the following and then access Llaminator at
 npm run-script serve
 ```
 
-## Exporting Llaminator as a static site (dev mode)
+## Exporting Llaminator as a static site
 
 To compile the typescript, resolve node dependencies, etc, and
-dump the output into `dist_dev/`, you can run:
+dump the output into `dist/`, you can run:
 
 ```
 npm run-script export-dev
