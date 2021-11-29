@@ -43,7 +43,7 @@ To compile the typescript, resolve node dependencies, etc, and
 dump the output into `dist/`, you can run:
 
 ```
-npm run-script export-dev
+npm run-script build
 ```
 
 Note: this probably won't be part of our typical development workflow,
