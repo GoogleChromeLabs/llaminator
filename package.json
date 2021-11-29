@@ -4,7 +4,7 @@
   "description": "Llaminator helps you store and access images directly from your browser.",
   "scripts": {
     "serve": "wds --node-resolve --watch --port 4629 --open src/",
-    "export-dev": "rollup -c rollup.config.export-dev.mjs"
+    "build": "rollup -c rollup.config.mjs"
   },
   "author": "",
   "license": "Apache-2.0",

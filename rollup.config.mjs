@@ -17,11 +17,11 @@
 import clear from 'rollup-plugin-clear';
 import copy from 'rollup-plugin-copy';
 import esbuild from 'rollup-plugin-esbuild';
-import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
+import resolve from '@rollup/plugin-node-resolve';
 import { replaceConfig } from './build_common.mjs';
 
-const outDir = 'dist_dev';
+const outDir = 'dist';
 const entryFileNamesPattern = '[name].ts';
 const replacePluginInstance = replace(replaceConfig('/'));
 
