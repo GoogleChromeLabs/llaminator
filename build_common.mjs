@@ -19,6 +19,7 @@ function replaceConfig(root) {
     preventAssignment: true,
     values: {
       '__APP_ROOT__': root,
+      'process.env.NODE_ENV': '""'
     },
   };
 }
