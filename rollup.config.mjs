@@ -23,7 +23,7 @@ import { replaceConfig } from './build_common.mjs';
 
 const outDir = 'dist';
 const entryFileNamesPattern = '[name].ts';
-const replacePluginInstance = replace(replaceConfig('/'));
+const replacePluginInstance = replace(replaceConfig(''));
 
 export default [
   {
