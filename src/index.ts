@@ -95,7 +95,6 @@ async function onFileInputChange(e: Event, dbOpenRequest: IDBOpenDBRequest, imgE
 function displayIfShareEnabled(target: HTMLElement, blob: Blob): void {
   const f = fileFromBlob(blob);
   if ('share' in navigator && 'canShare' in navigator &&
-      /** @ts-ignore navigator.canShare isn't included in TypeScript's IDL? */
       navigator.canShare({files: [f]})) {
     target.style.display = 'block';
   }
