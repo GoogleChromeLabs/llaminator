@@ -22,7 +22,6 @@ import resolve from '@rollup/plugin-node-resolve';
 import { replaceConfig } from './build_common.mjs';
 
 const outDir = 'dist';
-const entryFileNamesPattern = '[name].ts';
 const replacePluginInstance = replace(replaceConfig(''));
 
 export default [
@@ -31,7 +30,6 @@ export default [
     output: {
       dir: outDir,
       sourcemap: true,
-      entryFileNames: entryFileNamesPattern,
     },
     plugins: [
       clear({ targets: [outDir] }),
@@ -53,7 +51,6 @@ export default [
     output: {
       dir: outDir,
       sourcemap: true,
-      entryFileNames: entryFileNamesPattern,
     },
     plugins: [
       replacePluginInstance,

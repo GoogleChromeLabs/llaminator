@@ -32,9 +32,9 @@ self.addEventListener('install', function (event): void {
       return cache.addAll([
         '__APP_ROOT__/',
         '__APP_ROOT__/index.html',
-        '__APP_ROOT__/index.ts',
+        '__APP_ROOT__/index.js',
         '__APP_ROOT__/manifest.json',
-        '__APP_ROOT__/sw.ts',
+        '__APP_ROOT__/sw.js',
       ]);
     }),
   );
