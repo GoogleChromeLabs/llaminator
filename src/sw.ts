@@ -14,8 +14,9 @@
  *  limitations under the License.
  */
 
-import { registerRoute } from 'workbox-routing';
-import { StaleWhileRevalidate } from 'workbox-strategies';
+const workboxAddr = 'https://storage.googleapis.com/workbox-cdn/releases/6.2.0/workbox-sw.js'; // TODO: host this file in this project?
+importScripts(workboxAddr);
+declare var workbox: any;
 
 const cacheName = 'app-cache';
 
@@ -23,13 +24,14 @@ const mainDBName = 'appDB';
 const objStoreName = 'imageStore';
 const mainImageName = 'mainImage';
 
-declare var self: ServiceWorkerGlobalScope;
+const swSelf = (self as unknown) as ServiceWorkerGlobalScope;
 
-self.addEventListener('install', function (event): void {
+swSelf.addEventListener('install', function (event): void {
   // precache all assets
   event.waitUntil(
     caches.open(cacheName).then(function (cache) {
       return cache.addAll([
+        workboxAddr, // TODO: is this actually necessary?
         '__APP_ROOT__/',
         '__APP_ROOT__/index.html',
         '__APP_ROOT__/index.ts',
@@ -40,7 +42,7 @@ self.addEventListener('install', function (event): void {
   );
 });
 
-registerRoute(
+workbox.routing.registerRoute(
   ({url}) => url.pathname === '__APP_ROOT__/share-target',
   async ({request}) => {
     const data = await request.formData();
@@ -88,9 +90,9 @@ async function storeFile(f: File, dbOpenRequest: IDBOpenDBRequest) {
   // TODO: add option to remove from storage
 }
 
-registerRoute(
+workbox.routing.registerRoute(
   ({url}) => true,
-  new StaleWhileRevalidate({
+  new workbox.strategies.StaleWhileRevalidate({
     cacheName: cacheName
   })
 );
