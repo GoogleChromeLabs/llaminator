@@ -14,8 +14,9 @@
  *  limitations under the License.
  */
 
-import { registerRoute } from 'workbox-routing';
 import { StaleWhileRevalidate } from 'workbox-strategies';
+import { precacheAndRoute } from 'workbox-precaching';
+import { registerRoute } from 'workbox-routing';
 
 const cacheName = 'app-cache';
 
@@ -25,20 +26,7 @@ const mainImageName = 'mainImage';
 
 declare var self: ServiceWorkerGlobalScope;
 
-self.addEventListener('install', function (event): void {
-  // precache all assets
-  event.waitUntil(
-    caches.open(cacheName).then(function (cache) {
-      return cache.addAll([
-        '__APP_ROOT__/',
-        '__APP_ROOT__/index.html',
-        '__APP_ROOT__/index.ts',
-        '__APP_ROOT__/manifest.json',
-        '__APP_ROOT__/sw.ts',
-      ]);
-    }),
-  );
-});
+precacheAndRoute(self.__WB_MANIFEST);
 
 registerRoute(
   ({url}) => url.pathname === '__APP_ROOT__/share-target',
