@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "description": "Llaminator helps you store and access images directly from your browser.",
   "scripts": {
-    "serve": "wds --node-resolve --watch --port 4629 --open src/",
-    "build": "rollup -c rollup.config.mjs"
+    "build": "webpack --mode=production",
+    "serve": "webpack serve --open --mode=development"
   },
   "author": "",
   "license": "Apache-2.0",
@@ -12,10 +12,15 @@
     "url": "https://github.com/GoogleChromeLabs/llaminator/issues"
   },
   "devDependencies": {
-    "typescript": "^4.5.2"
+    "html-webpack-plugin": "^5.5.0",
+    "ts-loader": "^9.2.6",
+    "typescript": "^4.5.2",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.6.0",
+    "webpack-pwa-manifest": "^4.3.0"
   },
   "dependencies": {
-    "workbox-routing": "^6.4.1",
-    "workbox-strategies": "^6.4.1"
+    "workbox-routing": "^6.4.2",
+    "workbox-strategies": "^6.4.2"
   }
 }
