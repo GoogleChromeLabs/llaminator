@@ -20,21 +20,8 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { InjectManifest } = require('workbox-webpack-plugin');
 
-module.exports = (env, options) => ({
-  entry: './src/index.ts',
-  resolve: {
-    extensions: ['.ts', '.tsx', '.js'],
-  },
-  module: {
-    rules: [
-      {
-        test: /\.tsx?$/,
-        use: 'ts-loader',
-        exclude: /node_modules/,
-      },
-    ],
-  },
-  plugins: [
+module.exports = (env, options) => {
+  const plugins = [
     new CopyWebpackPlugin({
       patterns: [
         {
@@ -47,21 +34,45 @@ module.exports = (env, options) => ({
       template: 'src/index.html',
       inject: 'body',
     }),
-    new InjectManifest({
+  ];
+
+  // When hot code reloading is used in development environments, Workbox is
+  // unable to accumulate the iterative compilation steps which ends up creating
+  // partial precache and routing configurations. In other words, bugs. See:
+  // https://github.com/GoogleChrome/workbox/issues/1790
+  if (options.mode !== 'development') {
+    plugins.push(new InjectManifest({
       swSrc: './src/sw.ts',
-    }),
-  ],
-  devServer: {
-    static: {
-      directory: path.join(__dirname, 'public'),
-    },
-    compress: true,
-    port: 4629,
-  },
-  output: {
-    filename: options.mode === 'production' ? '[name].[contenthash].js'
-                                            : '[name].js',
-    path: path.resolve(__dirname, 'dist'),
-    clean: true,
+    }));
   }
-});
+
+  return {
+    entry: './src/index.ts',
+    resolve: {
+      extensions: ['.ts', '.tsx', '.js'],
+    },
+    module: {
+      rules: [
+        {
+          test: /\.tsx?$/,
+          use: 'ts-loader',
+          exclude: /node_modules/,
+        },
+      ],
+    },
+    plugins,
+    devServer: {
+      static: {
+        directory: path.join(__dirname, 'public'),
+      },
+      compress: true,
+      port: 4629,
+    },
+    output: {
+      filename: options.mode === 'production' ? '[name].[contenthash].js'
+                                              : '[name].js',
+      path: path.resolve(__dirname, 'dist'),
+      clean: true,
+    }
+  };
+};
