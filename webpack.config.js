@@ -14,6 +14,7 @@
  *  limitations under the License.
  */
 
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
@@ -34,6 +35,14 @@ module.exports = (env, options) => ({
     ],
   },
   plugins: [
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: '**/*',
+          context: path.resolve(__dirname, 'public'),
+        },
+      ],
+    }),
     new HtmlWebpackPlugin({
       template: 'src/index.html',
       inject: 'body',

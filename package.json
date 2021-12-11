@@ -12,6 +12,7 @@
     "url": "https://github.com/GoogleChromeLabs/llaminator/issues"
   },
   "devDependencies": {
+    "copy-webpack-plugin": "^10.1.0",
     "html-webpack-plugin": "^5.5.0",
     "ts-loader": "^9.2.6",
     "typescript": "^4.5.2",
