@@ -17,8 +17,10 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
-module.exports = {
-  entry: './src/index.ts',
+module.exports = (env, options) => ({
+  entry: {
+    app: './src/index.ts',
+  },
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
   },
@@ -34,6 +36,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: 'src/index.html',
+      inject: 'body',
     }),
   ],
   devServer: {
@@ -44,8 +47,9 @@ module.exports = {
     port: 4629,
   },
   output: {
-    filename: 'app.js',
+    filename: options.mode === 'production' ? '[name].[contenthash].js'
+                                            : '[name].js',
     path: path.resolve(__dirname, 'dist'),
     clean: true,
   }
-};
+});
