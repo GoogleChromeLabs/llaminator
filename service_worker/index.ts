@@ -29,7 +29,7 @@ declare var self: ServiceWorkerGlobalScope;
 precacheAndRoute(self.__WB_MANIFEST);
 
 registerRoute(
-  ({url}) => url.pathname === '__APP_ROOT__/share-target',
+  ({url}) => url.pathname.endsWith('/share-target'),
   async ({request}) => {
     const data = await request.formData();
 
@@ -56,7 +56,7 @@ registerRoute(
 
     // TODO: handle invalid share
     storeFile(data.get('image') as File, dbOpenRequest!);
-    return Response.redirect('__APP_ROOT__/index.html', 302);
+    return Response.redirect('/', 302);
   },
   'POST'
 );
