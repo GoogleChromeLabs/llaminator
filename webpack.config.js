@@ -14,14 +14,14 @@
  *  limitations under the License.
  */
 
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { InjectManifest } = require('workbox-webpack-plugin');
+
 module.exports = (env, options) => ({
-  entry: {
-    app: './src/index.ts',
-  },
+  entry: './src/index.ts',
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
   },
@@ -46,6 +46,9 @@ module.exports = (env, options) => ({
     new HtmlWebpackPlugin({
       template: 'src/index.html',
       inject: 'body',
+    }),
+    new InjectManifest({
+      swSrc: './src/sw.ts',
     }),
   ],
   devServer: {
