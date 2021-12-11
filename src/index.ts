@@ -14,9 +14,9 @@
  *  limitations under the License.
  */
 
-if ('serviceWorker' in navigator) {
+if ('serviceWorker' in navigator && process.env.NODE_ENV !== 'development') {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('__APP_ROOT__/sw.ts');
+    navigator.serviceWorker.register('sw.js');
   });
 } else {
   // TODO display error message and fail gracefully
