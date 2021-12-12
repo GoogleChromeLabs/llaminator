@@ -16,7 +16,7 @@
 
 import '@material/mwc-top-app-bar-fixed';
 
-import './components/llama-upload-fab';
+import './components/llama-select-fab';
 import './llaminator.css';
 
 if ('serviceWorker' in navigator && process.env.NODE_ENV !== 'development') {

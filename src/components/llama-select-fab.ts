@@ -19,8 +19,8 @@ import '@material/mwc-fab';
 import { LitElement, css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
-@customElement('llama-upload-fab')
-export class LlamaUploadFab extends LitElement {
+@customElement('llama-select-fab')
+export class LlamaSelectFab extends LitElement {
   static get styles() {
     return css`
       #root {
@@ -49,10 +49,12 @@ export class LlamaUploadFab extends LitElement {
 
   render() {
     return html`
-      <input type="file" id="upload" hidden @change=${this.handleInputChange} />
-      <label id="root" for="upload">
+      <input type="file" accept="image/*"
+             id="select" hidden
+             @change=${this.handleInputChange} />
+      <label id="root" for="select">
         <mwc-fab icon="file_upload"
-                 label="Select a file to upload to Llaminator">
+                 label="Select a file to store in Llaminator">
         </mwc-fab>
       </label>`;
   }
