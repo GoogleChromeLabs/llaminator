@@ -17,8 +17,10 @@
 const path = require('path');
 
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { InjectManifest } = require('workbox-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = (env, options) => {
   const plugins = [
@@ -34,6 +36,8 @@ module.exports = (env, options) => {
       template: 'src/index.html',
       inject: 'body',
     }),
+    new CssMinimizerPlugin(),
+    new MiniCssExtractPlugin(),
   ];
 
   // When hot code reloading is used in development environments, Workbox is
@@ -48,7 +52,7 @@ module.exports = (env, options) => {
   }
 
   return {
-    entry: './src/index.ts',
+    entry: { llaminator: './src/index.ts' },
     resolve: {
       extensions: ['.ts', '.tsx', '.js'],
     },
@@ -56,7 +60,7 @@ module.exports = (env, options) => {
       rules: [
         {
           test: /\.css$/,
-          use: ['style-loader', 'css-loader'],
+          use: [MiniCssExtractPlugin.loader, 'css-loader'],
         },
         {
           test: /\.tsx?$/,
