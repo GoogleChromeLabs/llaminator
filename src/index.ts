@@ -16,6 +16,7 @@
 
 import '@material/mwc-top-app-bar-fixed';
 
+import './components/llama-upload-fab';
 import './llaminator.css';
 
 if ('serviceWorker' in navigator && process.env.NODE_ENV !== 'development') {
@@ -31,7 +32,7 @@ const objStoreName = 'imageStore';
 const mainImageName = 'mainImage';
 
 window.addEventListener('load', () => {
-  const fileInput = document.querySelector('#input') as HTMLInputElement;
+  const fileInput = document.querySelector('#input') as HTMLElement;
   const imgElement = document.querySelector('img') as HTMLImageElement;
   const shareBtn = document.querySelector('#share') as HTMLButtonElement;
 
@@ -48,7 +49,7 @@ window.addEventListener('load', () => {
     (e.target as IDBRequest).result.createObjectStore(objStoreName);
   });
 
-  fileInput.addEventListener('change', (e) => onFileInputChange(e, dbOpenRequest, imgElement, shareBtn));
+  fileInput.addEventListener('fileselected', (e) => onFileInputChange(e as CustomEvent, dbOpenRequest, imgElement, shareBtn));
 
   shareBtn.addEventListener('click', async () => {
     const blob = await fetch(imgElement.src).then(r => r.blob());
@@ -74,12 +75,8 @@ function onDBOpenSuccess(e: Event, imgElement: HTMLImageElement, shareBtn: HTMLB
   });
 }
 
-async function onFileInputChange(e: Event, dbOpenRequest: IDBOpenDBRequest, imgElement: HTMLImageElement, shareBtn: HTMLButtonElement) {
-  const inputElement = e.target as HTMLInputElement;
-
-  console.log(inputElement.value);
-  if (!inputElement.files || !inputElement.files.length) return;
-  const f = inputElement.files[0]; // TODO: null-check
+async function onFileInputChange(e: CustomEvent, dbOpenRequest: IDBOpenDBRequest, imgElement: HTMLImageElement, shareBtn: HTMLButtonElement) {
+  const f = e.detail as File;
   const b = new Blob([await f.arrayBuffer()], { type: f.type });
   // TODO: perhaps prompt before silently replacing old image, if one exists?
   imgElement.src = window.URL.createObjectURL(b);
