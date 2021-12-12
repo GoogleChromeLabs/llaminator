@@ -14,6 +14,10 @@
  *  limitations under the License.
  */
 
+import '@material/mwc-top-app-bar-fixed';
+
+import './llaminator.css';
+
 if ('serviceWorker' in navigator && process.env.NODE_ENV !== 'development') {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('sw.js');
