@@ -22,8 +22,14 @@
     <meta name="description" content="TODO">
     <title>Llaminator</title>
     <link rel="manifest" href="manifest.json">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Material+Icons&display=block" />
   </head>
   <body>
+    <mwc-top-app-bar-fixed>
+      <div slot="title">Llaminator!</div>
+    </mwc-top-app-bar-fixed>
     <img></img>
     <input type="file" id="input" accept="image/*">
     <button id="share" style="display: none;">Share</button>
