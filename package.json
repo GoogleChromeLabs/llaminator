@@ -26,6 +26,7 @@
   "dependencies": {
     "@material/mwc-fab": "^0.25.3",
     "@material/mwc-top-app-bar-fixed": "^0.25.3",
+    "idb": "^7.0.0",
     "lit": "^2.0.2",
     "workbox-precaching": "^6.4.2",
     "workbox-routing": "^6.4.2",
