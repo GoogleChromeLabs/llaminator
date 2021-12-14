@@ -107,19 +107,30 @@ export default class LlamaStorage {
   async update(id: FileUniqueID, file?: Blob, metadata?: FileMetadata): Promise<void> {
     if (!file && !metadata) return;
 
+    // don't "await" yet, so that we can kick off the blob "put" (if applicable)
+    // first.
+    const recordPromise = this.db.get('metadata', id);
+
     const now = Date.now();
-    const record = await this.db.get('metadata', id);
-    if (!record) throw `no record found for id '${id}'`;
+    let blobModified: number | null = null;
+    let promises: Promise<any>[] = [];
+    if (file) {
+      blobModified = now;
+      promises.push(this.db.put('blob', file, id));
+    }
+
+    let record = await recordPromise;
+    if (!record) throw `no record found for id '${id}'`; // TODO: this does kind of leave use in a bad state - maybe the optimization isn't worth it
+    if (blobModified) record.blobModified = blobModified;
     if (metadata) {
       record.metadata = metadata;
       record.metadataModified = now;
     }
+    promises.push(this.db.put('metadata', record, id));
 
-    if (file) {
-      record.blobModified = now;
-      await this.db.put('blob', file, id);
-    }
-
-    await this.db.put('metadata', record, id);
+    // TODO: it would be nice if the caller could access the FileRecord
+    // immediately, but then still indicate when the data finished
+    // being stored.
+    await Promise.allSettled(promises);
   }
 }
