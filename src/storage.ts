@@ -50,12 +50,14 @@ export default class LlamaStorage {
   private db: IDBPDatabase<LlamaDB>;
 
   private constructor(db: IDBPDatabase<LlamaDB>) {
+    console.log('Database initialized');
     this.db = db;
   }
 
   static async create() {
     return new LlamaStorage(await openDB(mainDBName, undefined /* version */, {
       upgrade(db, oldVersion, newVersion, transaction) {
+        console.log(`DB update request`);
         db.createObjectStore('blob');
         db.createObjectStore('metadata');
       },
@@ -83,6 +85,7 @@ export default class LlamaStorage {
       this.db.put('blob', file, id),
       this.db.put('metadata', record, id),
     ]);
+    console.log(`successfully added '${id}'`);
     return record;
   }
 
@@ -94,18 +97,20 @@ export default class LlamaStorage {
   async getFile(id: FileUniqueID): Promise<Blob> {
     const blob = await this.db.get('blob', id);
     if (!blob) throw `no blob found for id '${id}'`;
+    console.log(`successfully retrieved blob for '${id}'`);
     return blob;
   }
 
   async get(id: FileUniqueID): Promise<FileRecord> {
     const record = await this.db.get('metadata', id);
     if (!record) throw `no record found for id '${id}'`;
+    console.log(`successfully retrieved metadata for '${id}'`);
     return record;
   }
 
   // At least one of |file| and |metadata| must be provided.
-  async update(id: FileUniqueID, file?: Blob, metadata?: FileMetadata): Promise<void> {
-    if (!file && !metadata) return;
+  async update(id: FileUniqueID, file?: Blob, metadata?: FileMetadata): Promise<FileRecord> {
+    if (!file && !metadata) throw 'neither |file| nor |metadata| was provided';
 
     const now = Date.now();
     const record = await this.db.get('metadata', id);
@@ -121,5 +126,6 @@ export default class LlamaStorage {
     }
 
     await this.db.put('metadata', record, id);
+    console.log(`successfully updated '${id}'`);
   }
 }
