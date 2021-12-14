@@ -88,15 +88,19 @@ export default class LlamaStorage {
 
   async list(): Promise<FileRecord[]> {
     // TODO: https://github.com/jakearchibald/idb#async-iterators
-    return [];
+    throw 'list() is unimplemented';
   }
 
   async getFile(id: FileUniqueID): Promise<Blob> {
-    return (await this.db.get('blob', id)) as Blob; // TODO: may be undefined
+    const blob = await this.db.get('blob', id);
+    if (!blob) throw `no blob found for id '${id}'`;
+    return blob;
   }
 
   async get(id: FileUniqueID): Promise<FileRecord> {
-    return (await this.db.get('metadata', id)) as FileRecord; // TODO: may be undefined
+    const record = await this.db.get('metadata', id);
+    if (!record) throw `no record found for id '${id}'`;
+    return record;
   }
 
   // At least one of |file| and |metadata| must be provided.
@@ -104,7 +108,8 @@ export default class LlamaStorage {
     if (!file && !metadata) return;
 
     const now = Date.now();
-    const record = (await this.db.get('metadata', id)) as FileRecord; // TODO: may be undefined
+    const record = await this.db.get('metadata', id);
+    if (!record) throw `no record found for id '${id}'`;
     if (metadata) {
       record.metadata = metadata;
       record.metadataModified = now;
