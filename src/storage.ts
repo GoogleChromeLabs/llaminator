@@ -36,6 +36,11 @@ export type FileRecord = {
   metadataModified: Timestamp;
 };
 
+export type FileRecordReady = {
+  fileRecord: FileRecord;
+  ready: Promise<void>;
+}
+
 interface LlamaDB extends DBSchema {
   blob: {
     key: string;
@@ -68,7 +73,7 @@ export default class LlamaStorage {
     }));
   }
 
-  async add(file: Blob, metadata: FileMetadata): Promise<FileRecord> {
+  add(file: Blob, metadata: FileMetadata): FileRecordReady {
     const id: FileUniqueID = mainImageName /* TODO: generate unique IDs */;
     const now = Date.now();
     const record: FileRecord = {
@@ -79,15 +84,18 @@ export default class LlamaStorage {
       metadataModified: now,
     };
 
-    // TODO: it would be nice if the caller could access the FileRecord
-    // immediately, but then still indicate when the data finished
-    // being stored.
-    await Promise.allSettled([
+    const promises = [
       this.db.put('blob', file, id),
       this.db.put('metadata', record, id),
-    ]);
-    console.log(`successfully added '${id}'`);
-    return record;
+    ];
+
+    const ready = new Promise<void>(async (resolve, reject) => {
+        await Promise.allSettled(promises);
+        console.log(`successfully added '${id}'`);
+        resolve();
+    });
+
+    return { fileRecord: record, ready: ready };
   }
 
   async list(): Promise<FileRecord[]> {
@@ -134,9 +142,6 @@ export default class LlamaStorage {
     }
     promises.push(this.db.put('metadata', record, id));
 
-    // TODO: it would be nice if the caller could access the FileRecord
-    // immediately, but then still indicate when the data finished
-    // being stored.
     await Promise.allSettled(promises);
     console.log(`successfully updated '${id}'`);
     return record;
