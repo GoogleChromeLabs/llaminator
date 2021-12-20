@@ -99,16 +99,22 @@ export class LlamaStorage {
     throw 'list() is unimplemented';
   }
 
-  async getFile(id: FileUniqueID): Promise<Blob> {
+  async getFile(id: FileUniqueID): Promise<Blob | undefined> {
     const blob = await this.db.get('blob', id);
-    if (!blob) throw `no blob found for id '${id}'`;
+    if (!blob) {
+      console.log(`no blob found for id '${id}'`);
+      return undefined
+    }
     console.log(`successfully retrieved blob for '${id}'`);
     return blob;
   }
 
-  async get(id: FileUniqueID): Promise<FileRecord> {
+  async get(id: FileUniqueID): Promise<FileRecord | undefined> {
     const record = await this.db.get('metadata', id);
-    if (!record) throw `no record found for id '${id}'`;
+    if (!record) {
+      console.log(`no record found for id '${id}'`);
+      return undefined;
+    }
     console.log(`successfully retrieved metadata for '${id}'`);
     return record;
   }
