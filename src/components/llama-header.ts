@@ -15,14 +15,29 @@
  */
 
 import { LitElement, html } from 'lit';
-import { customElement } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 
 @customElement('llama-header')
 export class LlamaHeader extends LitElement {
+  @property({ type: String }) title: string;
+
+  constructor() {
+    super();
+    this.title = 'Untitled';
+  }
+
+  // No internal behaviour is necessary for the header, so avoid creating an
+  // open shadow root for this component and default to global styles instead.
+  createRenderRoot() { return this; }
+
   render() {
     return html`
-      <div>
-        <slot name="title"></slot>
-      </div>`;
+      <header class="mdc-top-app-bar mdc-top-app-bar--fixed">
+        <div class="mdc-top-app-bar__row">
+          <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+            <span class="mdc-top-app-bar__title">${this.title}</span>
+          </section>
+        </div>
+      </header>`;
   }
 }
