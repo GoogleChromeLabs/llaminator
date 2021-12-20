@@ -20,7 +20,6 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { InjectManifest } = require('workbox-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = (env, options) => {
   const plugins = [
@@ -37,7 +36,6 @@ module.exports = (env, options) => {
       inject: 'body',
     }),
     new CssMinimizerPlugin(),
-    new MiniCssExtractPlugin(),
   ];
 
   // When hot code reloading is used in development environments, Workbox is
@@ -59,8 +57,23 @@ module.exports = (env, options) => {
     module: {
       rules: [
         {
-          test: /\.css$/,
-          use: [MiniCssExtractPlugin.loader, 'css-loader'],
+          test: /\.scss$/,
+          use: [
+            {
+              loader: 'file-loader',
+              options: {
+                name: 'llaminator.css',
+              },
+            },
+            { loader: 'extract-loader' },
+            { loader: 'css-loader' },
+            {
+              loader: 'sass-loader',
+              options: {
+                implementation: require('sass'),
+              },
+            }
+          ],
         },
         {
           test: /\.tsx?$/,

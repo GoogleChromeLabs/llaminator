@@ -16,7 +16,7 @@
 
 import './components/llama-header';
 import './components/llama-select-fab';
-import './llaminator.css';
+import './llaminator.scss';
 import { LlamaStorage, kMainImageName, FileUniqueID } from './storage';
 
 if ('serviceWorker' in navigator && process.env.NODE_ENV !== 'development') {
