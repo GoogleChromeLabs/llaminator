@@ -14,6 +14,7 @@
  *  limitations under the License.
  */
 
+import './components/llama-header';
 import './components/llama-select-fab';
 import './llaminator.css';
 import { LlamaStorage, kMainImageName, FileUniqueID } from './storage';
