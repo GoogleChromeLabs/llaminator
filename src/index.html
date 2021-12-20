@@ -25,13 +25,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Material+Icons&display=block" />
+    <link rel="stylesheet" href="llaminator.css" />
   </head>
   <body>
-    <llama-header>
-      <div slot="title">Llaminator!</div>
-    </llama-header>
-    <img></img>
-    <button id="share" style="display: none;">Share</button>
-    <llama-select-fab id="input"></llama-select-fab>
+    <llama-header title="Llaminator!"></llama-header>
+    <main class="mdc-top-app-bar--fixed-adjust">
+      <img></img>
+      <button id="share" style="display: none;">Share</button>
+      <llama-select-fab id="input"></llama-select-fab>
+    </main>
   </body>
 </html>
