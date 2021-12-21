@@ -19,12 +19,7 @@ import { customElement, property } from 'lit/decorators.js';
 
 @customElement('llama-header')
 export class LlamaHeader extends LitElement {
-  @property({ type: String }) title: string;
-
-  constructor() {
-    super();
-    this.title = 'Untitled';
-  }
+  @property({ type: String }) title: string = 'Untitled';
 
   // No internal behaviour is necessary for the header, so avoid creating an
   // open shadow root for this component and default to global styles instead.
