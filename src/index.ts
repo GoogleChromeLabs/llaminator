@@ -17,7 +17,7 @@
 import './components/llama-header';
 import './components/llama-select-fab';
 import './llaminator.scss';
-import { LlamaStorage, kMainImageName, FileUniqueID } from './storage';
+import { LlamaStorage, FileUniqueID } from './storage';
 
 if ('serviceWorker' in navigator && process.env.NODE_ENV !== 'development') {
   window.addEventListener('load', () => {
@@ -35,19 +35,24 @@ window.addEventListener('load', () => {
   if (!window.indexedDB || !window.URL) { /* TODO: display error message */ }
 
   const dbPromise = LlamaStorage.create();
-  dbPromise.then((db) => onDBOpenSuccess(db, imgElement, shareBtn));
+  dbPromise.then((db) => {
+    shareBtn.addEventListener('click', async () => {
+      const id = await db.getCurrentID();
+      if (!id) return; // TODO: show error message
+      const file = await fileFromID(await dbPromise, id);
+      if (!file) return; // TODO: show error message
+      navigator.share({files: [file]});
+    });
+    onDBOpenSuccess(db, imgElement, shareBtn);
+  });
 
   fileInput.addEventListener('fileselected', (e) => onFileInputChange(e as CustomEvent, dbPromise, imgElement, shareBtn));
-
-  shareBtn.addEventListener('click', async () => {
-    const file = await fileFromID(await dbPromise, kMainImageName /* TODO: support multiple */);
-    if (!file) return; // TODO: show error message
-    navigator.share({files: [file]});
-  });
 });
 
 async function onDBOpenSuccess(db: LlamaStorage, imgElement: HTMLImageElement, shareBtn: HTMLButtonElement) {
-  const blob = await db.getFile(kMainImageName /* TODO: support multiple */);
+  const id = await db.getCurrentID();
+  if (!id) return;
+  const blob = await db.getFile(id);
   if (!blob) return;
   imgElement.src = window.URL.createObjectURL(blob);
   displayIfShareEnabled(shareBtn, db);
@@ -70,7 +75,9 @@ async function onFileInputChange(e: CustomEvent, dbPromise: Promise<LlamaStorage
 }
 
 async function displayIfShareEnabled(target: HTMLElement, db: LlamaStorage): Promise<void> {
-  const file = await fileFromID(db, kMainImageName /* TODO: support multiple */);
+  const id = await db.getCurrentID();
+  if (!id) return;
+  const file = await fileFromID(db, id);
   if (!file) return;
   if ('share' in navigator && 'canShare' in navigator &&
       navigator.canShare({files: [file]})) {

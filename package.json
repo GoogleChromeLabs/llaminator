@@ -12,6 +12,7 @@
     "url": "https://github.com/GoogleChromeLabs/llaminator/issues"
   },
   "devDependencies": {
+    "@types/uuid": "^8.3.3",
     "copy-webpack-plugin": "^10.1.0",
     "css-loader": "^6.5.1",
     "css-minimizer-webpack-plugin": "^3.2.0",
@@ -31,6 +32,7 @@
     "@material/top-app-bar": "^13.0.0",
     "idb": "^7.0.0",
     "lit": "^2.0.2",
+    "uuid": "^8.3.2",
     "workbox-precaching": "^6.4.2",
     "workbox-routing": "^6.4.2",
     "workbox-strategies": "^6.4.2"
