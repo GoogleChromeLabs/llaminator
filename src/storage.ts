@@ -95,8 +95,7 @@ export class LlamaStorage {
   }
 
   async list(): Promise<FileRecord[]> {
-    // TODO: https://github.com/jakearchibald/idb#async-iterators
-    throw 'list() is unimplemented';
+    return this.db.getAll('metadata');
   }
 
   async getFile(id: FileUniqueID): Promise<Blob | undefined> {
