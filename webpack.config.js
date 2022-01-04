@@ -16,6 +16,7 @@
 
 const path = require('path');
 
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -36,6 +37,11 @@ module.exports = (env, options) => {
       inject: 'body',
     }),
     new CssMinimizerPlugin(),
+    new BundleAnalyzerPlugin({
+      analyzerMode: 'static',
+      openAnalyzer: false,
+      reportFilename: 'index-sizes.html',
+    }),
   ];
 
   // When hot code reloading is used in development environments, Workbox is
