@@ -30,9 +30,12 @@
   <body>
     <llama-header title="Llaminator!"></llama-header>
     <main class="mdc-top-app-bar--fixed-adjust">
-      <img></img>
-      <button id="share" style="display: none;">Share</button>
-      <llama-select-fab id="input"></llama-select-fab>
+      <!-- Items stored in Llaminator will be rendered here. -->
+      <!-- TODO: Avoid the flash-of-unavailable-content (FOUC) -->
+      <p>
+        Nothing has been stored in Llaminator yet. Use the fab to add something?
+      </p>
     </main>
+    <llama-select-fab id="input"></llama-select-fab>
   </body>
 </html>

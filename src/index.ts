@@ -14,7 +14,10 @@
  *  limitations under the License.
  */
 
+import { html, render } from 'lit-html';
+
 import './components/llama-header';
+import './components/llama-item';
 import './components/llama-select-fab';
 import './llaminator.scss';
 import { LlamaStorage, FileUniqueID } from './storage';
@@ -29,66 +32,53 @@ if ('serviceWorker' in navigator && process.env.NODE_ENV !== 'development') {
 
 window.addEventListener('load', () => {
   const fileInput = document.querySelector('#input') as HTMLElement;
-  const imgElement = document.querySelector('img') as HTMLImageElement;
-  const shareBtn = document.querySelector('#share') as HTMLButtonElement;
+  const mainElement = document.querySelector('main') as HTMLElement;
 
   if (!window.indexedDB || !window.URL) { /* TODO: display error message */ }
 
   const dbPromise = LlamaStorage.create();
-  dbPromise.then((db) => {
-    shareBtn.addEventListener('click', async () => {
-      const id = await db.getCurrentID();
-      if (!id) return; // TODO: show error message
-      const file = await fileFromID(await dbPromise, id);
-      if (!file) return; // TODO: show error message
-      navigator.share({files: [file]});
-    });
-    onDBOpenSuccess(db, imgElement, shareBtn);
+  dbPromise.then(async db => {
+    const id = await db.getCurrentID();
+    if (!id) return;
+
+    const blob = await db.getFile(id);
+    if (!blob) return;
+
+    createOrReplaceVisibleItem(mainElement, dbPromise, id, URL.createObjectURL(blob));
   });
 
-  fileInput.addEventListener('fileselected', (e) => onFileInputChange(e as CustomEvent, dbPromise, imgElement, shareBtn));
+  fileInput.addEventListener('fileselected', e =>
+      onFileInputChange(e as CustomEvent, mainElement, dbPromise));
 });
 
-async function onDBOpenSuccess(db: LlamaStorage, imgElement: HTMLImageElement, shareBtn: HTMLButtonElement) {
-  const id = await db.getCurrentID();
-  if (!id) return;
-  const blob = await db.getFile(id);
-  if (!blob) return;
-  imgElement.src = window.URL.createObjectURL(blob);
-  displayIfShareEnabled(shareBtn, db);
+function createOrReplaceVisibleItem(container: HTMLElement,
+                                    dbPromise: Promise<LlamaStorage>,
+                                    id: string,
+                                    src: string): void {
+  // TODO: Support displaying any number of stored items in Llaminator. For now,
+  // remove all existing content from the |container| to ensure that only a
+  // single item is displayed.
+  while (container.children.length)
+    container.firstChild?.remove();
+
+  render(html`
+    <llama-item .storage=${dbPromise} id=${id} src=${src}>
+    </llama-item>`, container);
 }
 
-async function onFileInputChange(e: CustomEvent, dbPromise: Promise<LlamaStorage>, imgElement: HTMLImageElement, shareBtn: HTMLButtonElement) {
+async function onFileInputChange(e: CustomEvent, container: HTMLElement, dbPromise: Promise<LlamaStorage>) {
   const db = await dbPromise;
   const file = e.detail as File;
   const blob = new Blob([await file.arrayBuffer()], { type: file.type });
-  // TODO: perhaps prompt before silently replacing old image, if one exists?
-  imgElement.src = window.URL.createObjectURL(blob);
+
   const fileRecord = await db.add(blob, {
     filename: file.name,
     mimeType: file.type,
     // title: '',
   }); // TODO: or update()
+
   console.log(`stored image as id ${fileRecord.id}`)
-  displayIfShareEnabled(shareBtn, db);
-  // TODO: add option to remove from storage
-}
 
-async function displayIfShareEnabled(target: HTMLElement, db: LlamaStorage): Promise<void> {
-  const id = await db.getCurrentID();
-  if (!id) return;
-  const file = await fileFromID(db, id);
-  if (!file) return;
-  if ('share' in navigator && 'canShare' in navigator &&
-      navigator.canShare({files: [file]})) {
-    target.style.display = 'block';
-  }
-}
-
-async function fileFromID(db: LlamaStorage, id: FileUniqueID): Promise<File | undefined> {
-  const record = await db.get(id);
-  const blob = await db.getFile(id);
-  if (!record || !blob) return undefined;
-  return new File([blob], record.metadata.filename,
-    {type: record.metadata.mimeType});
+  // TODO: perhaps prompt before silently replacing old image, if one exists?
+  createOrReplaceVisibleItem(container, dbPromise, fileRecord.id, URL.createObjectURL(blob));
 }
