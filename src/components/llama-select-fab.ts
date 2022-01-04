@@ -37,7 +37,7 @@ export class LlamaSelectFab extends LitElement {
 
   render() {
     return html`
-      <div class="mdc-touch-target-wrapper llama-upload-button">
+      <div class="mdc-touch-target-wrapper">
         <button class="mdc-fab mdc-fab--touch">
           <label aria-label="Select a file to store in Llaminator" for="select">
             <input type="file" accept="image/*" id="select" hidden
