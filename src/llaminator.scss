@@ -14,6 +14,7 @@
  *  limitations under the License.
  */
 
+@use '@material/fab/mdc-fab';
 @use '@material/top-app-bar/mdc-top-app-bar';
 
 * {
@@ -30,4 +31,11 @@ html {
 html, body {
   width: 100%;
   height: 100%;
+}
+
+llama-select-fab {
+  position: absolute;
+  display: block;
+  bottom: 32px;
+  right: 32px;
 }
