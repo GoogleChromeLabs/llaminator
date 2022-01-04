@@ -28,7 +28,7 @@
     "workbox-webpack-plugin": "^6.4.2"
   },
   "dependencies": {
-    "@material/mwc-fab": "^0.25.3",
+    "@material/fab": "^13.0.0",
     "@material/top-app-bar": "^13.0.0",
     "idb": "^7.0.0",
     "lit": "^2.0.2",
