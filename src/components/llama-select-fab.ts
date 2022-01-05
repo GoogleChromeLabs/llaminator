@@ -14,26 +14,14 @@
  *  limitations under the License.
  */
 
-import '@material/mwc-fab';
-
-import { LitElement, css, html } from 'lit';
+import { LitElement, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
 @customElement('llama-select-fab')
 export class LlamaSelectFab extends LitElement {
-  static get styles() {
-    return css`
-      #root {
-        position: absolute;
-        display: block;
-        bottom: 32px;
-        right: 32px;
-      }
-
-      mwc-fab {
-        pointer-events: none;
-      }`;
-  }
+  // No internal behaviour is necessary for the header, so avoid creating an
+  // open shadow root for this component and default to global styles instead.
+  createRenderRoot() { return this; }
 
   handleInputChange(event: Event) {
     if (!(event.target instanceof HTMLInputElement))
@@ -49,13 +37,16 @@ export class LlamaSelectFab extends LitElement {
 
   render() {
     return html`
-      <input type="file" accept="image/*"
-             id="select" hidden
-             @change=${this.handleInputChange} />
-      <label id="root" for="select">
-        <mwc-fab icon="file_upload"
-                 label="Select a file to store in Llaminator">
-        </mwc-fab>
-      </label>`;
+      <div class="mdc-touch-target-wrapper">
+        <button class="mdc-fab mdc-fab--touch">
+          <label aria-label="Select a file to store in Llaminator" for="select">
+            <input type="file" accept="image/*" id="select" hidden
+                   @change=${this.handleInputChange} />
+            <div class="mdc-fab__ripple"></div>
+            <span class="material-icons mdc-fab__icon">file_upload</span>
+            <div class="mdc-fab__touch"></div>
+          </label>
+        </button>
+      </div>`;
   }
 }
