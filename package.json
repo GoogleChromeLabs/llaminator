@@ -4,7 +4,8 @@
   "description": "Llaminator helps you store and access images directly from your browser.",
   "scripts": {
     "build": "webpack --mode=production",
-    "serve": "webpack serve --open --mode=development"
+    "serve": "webpack serve --open --mode=development",
+    "test": "jest"
   },
   "author": "",
   "license": "Apache-2.0",
@@ -19,6 +20,9 @@
     "extract-loader": "^5.1.0",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.5.0",
+    "jest": "^27.4.5",
+    "jest-puppeteer": "^6.0.3",
+    "puppeteer": "^12.0.0",
     "sass": "^1.45.0",
     "sass-loader": "^12.4.0",
     "ts-loader": "^9.2.6",
@@ -37,5 +41,8 @@
     "workbox-precaching": "^6.4.2",
     "workbox-routing": "^6.4.2",
     "workbox-strategies": "^6.4.2"
+  },
+  "jest": {
+    "preset": "jest-puppeteer"
   }
 }
