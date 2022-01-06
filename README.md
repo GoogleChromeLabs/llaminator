@@ -16,9 +16,10 @@ or home screen.
 
 ## Installing and building Llaminator
 
-NPM v8 and Node v17 are used by Llaminator for dependency management, and have
-to be available on the host operating system. The recommended way to install
-these is to first [install
+[Node](https://nodejs.org/) v16 or v17 (with [NPM](https://www.npmjs.com/) v7 or
+v8, respectively) are used by Llaminator for dependency management, and have to
+be available on the host operating system. The recommended way to install these
+is to first [install
 NVM](https://github.com/nvm-sh/nvm#installing-and-updating), then use NVM to
 install the latest NPM+Node by running:
 
