@@ -8,13 +8,11 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [16.x, 17.x]
     
     steps:
     - uses: actions/checkout@v2
 
-    # Consider setting up a dependency cache:
-    # https://github.com/actions/setup-node#caching-packages-dependencies
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
