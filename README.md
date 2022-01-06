@@ -16,10 +16,17 @@ or home screen.
 
 ## Installing and building Llaminator
 
-[NPM and Node.js](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
-are used by Llaminator for dependency management, and have to be available on
-the host operating system. After checking out this repository, initialize your
-environment by running:
+NPM v8 and Node v17 are used by Llaminator for dependency management, and have
+to be available on the host operating system. The recommended way to install
+these is to first [install
+NVM](https://github.com/nvm-sh/nvm#installing-and-updating), then use NVM to
+install the latest NPM+Node by running:
+
+```
+nvm install node
+```
+
+Then check out this repository and initialize your environment by running:
 
 ```
 npm install
