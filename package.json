@@ -8,6 +8,10 @@
     "serve": "webpack serve --open --mode=development",
     "test": "jest"
   },
+  "engines": {
+    "node": ">=16",
+    "npm": ">=7"
+  },
   "author": "",
   "license": "Apache-2.0",
   "bugs": {
