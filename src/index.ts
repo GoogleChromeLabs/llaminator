@@ -58,8 +58,9 @@ function createOrReplaceVisibleItem(container: HTMLElement,
   // TODO: Support displaying any number of stored items in Llaminator. For now,
   // remove all existing content from the |container| to ensure that only a
   // single item is displayed.
-  while (container.children.length)
+  while (container.children.length) {
     container.firstChild?.remove();
+  }
 
   render(html`
     <llama-item .storage=${dbPromise} id=${id} src=${src}>
