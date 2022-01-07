@@ -33,21 +33,27 @@ export class LlamaItem extends LitElement {
   createRenderRoot() { return this; }
 
   async shareItem() {
-    if (!this.storage) return;
+    if (!this.storage) {
+      console.warn('Unable to share this item: @storage property not set.');
+      return;
+    }
 
     const db = await this.storage;
     const record = await db.get(this.id);
     const blob = await db.getFile(this.id);
 
-    if (!record || !blob) return;
+    if (!record || !blob) {
+      // TODO: Display an error message as the sharing operation got aborted.
+      return;
+    }
 
     const file = new File([ blob ], record.metadata.filename, {
       type: record.metadata.mimeType,
     });
 
-    if (!navigator.canShare({ files: [ file ] })) return;
-
-    navigator.share({ files: [ file ] });
+    if (navigator.canShare({ files: [ file ] })) {
+      navigator.share({ files: [ file ] });
+    }
   }
 
   render() {
