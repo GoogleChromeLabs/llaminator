@@ -8,6 +8,7 @@ jobs:
 
     strategy:
       matrix:
+        # We want to support the current version and the latest LTS version.
         node-version: [16.x, 17.x]
     
     steps:
