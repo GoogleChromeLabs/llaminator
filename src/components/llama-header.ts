@@ -14,16 +14,18 @@
  *  limitations under the License.
  */
 
-import { LitElement, html } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import {LitElement, html} from 'lit';
+import {customElement, property} from 'lit/decorators.js';
 
 @customElement('llama-header')
 export class LlamaHeader extends LitElement {
-  @property({ type: String }) title: string = 'Untitled';
+  @property({type: String}) title: string = 'Untitled';
 
   // No internal behaviour is necessary for the header, so avoid creating an
   // open shadow root for this component and default to global styles instead.
-  createRenderRoot() { return this; }
+  createRenderRoot() {
+    return this;
+  }
 
   render() {
     return html`

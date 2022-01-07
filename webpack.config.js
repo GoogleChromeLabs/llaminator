@@ -16,11 +16,11 @@
 
 const path = require('path');
 
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { InjectManifest } = require('workbox-webpack-plugin');
+const {InjectManifest} = require('workbox-webpack-plugin');
 
 module.exports = (env, options) => {
   const plugins = [
@@ -56,7 +56,7 @@ module.exports = (env, options) => {
   }
 
   return {
-    entry: { llaminator: './src/index.ts' },
+    entry: {llaminator: './src/index.ts'},
     resolve: {
       extensions: ['.ts', '.tsx', '.js'],
     },
@@ -71,14 +71,14 @@ module.exports = (env, options) => {
                 name: 'llaminator.css',
               },
             },
-            { loader: 'extract-loader' },
-            { loader: 'css-loader' },
+            {loader: 'extract-loader'},
+            {loader: 'css-loader'},
             {
               loader: 'sass-loader',
               options: {
                 implementation: require('sass'),
               },
-            }
+            },
           ],
         },
         {
@@ -97,10 +97,10 @@ module.exports = (env, options) => {
       port: 4629,
     },
     output: {
-      filename: options.mode === 'production' ? '[name].[contenthash].js'
-                                              : '[name].js',
+      filename: options.mode === 'production' ? '[name].[contenthash].js' :
+                                              '[name].js',
       path: path.resolve(__dirname, 'dist'),
       clean: true,
-    }
+    },
   };
 };

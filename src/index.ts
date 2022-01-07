@@ -17,7 +17,7 @@
 import './components/llama-header';
 import './components/llama-select-fab';
 import './llaminator.scss';
-import { LlamaStorage, FileUniqueID } from './storage';
+import {LlamaStorage, FileUniqueID} from './storage';
 
 if ('serviceWorker' in navigator && process.env.NODE_ENV !== 'development') {
   window.addEventListener('load', () => {
@@ -32,7 +32,7 @@ window.addEventListener('load', () => {
   const imgElement = document.querySelector('img') as HTMLImageElement;
   const shareBtn = document.querySelector('#share') as HTMLButtonElement;
 
-  if (!window.indexedDB || !window.URL) { /* TODO: display error message */ }
+  if (!window.indexedDB || !window.URL) {/* TODO: display error message */}
 
   const dbPromise = LlamaStorage.create();
   dbPromise.then((db) => {
@@ -61,7 +61,7 @@ async function onDBOpenSuccess(db: LlamaStorage, imgElement: HTMLImageElement, s
 async function onFileInputChange(e: CustomEvent, dbPromise: Promise<LlamaStorage>, imgElement: HTMLImageElement, shareBtn: HTMLButtonElement) {
   const db = await dbPromise;
   const file = e.detail as File;
-  const blob = new Blob([await file.arrayBuffer()], { type: file.type });
+  const blob = new Blob([await file.arrayBuffer()], {type: file.type});
   // TODO: perhaps prompt before silently replacing old image, if one exists?
   imgElement.src = window.URL.createObjectURL(blob);
   const fileRecord = await db.add(blob, {
@@ -69,7 +69,7 @@ async function onFileInputChange(e: CustomEvent, dbPromise: Promise<LlamaStorage
     mimeType: file.type,
     // title: '',
   }); // TODO: or update()
-  console.log(`stored image as id ${fileRecord.id}`)
+  console.log(`stored image as id ${fileRecord.id}`);
   displayIfShareEnabled(shareBtn, db);
   // TODO: add option to remove from storage
 }
@@ -90,5 +90,5 @@ async function fileFromID(db: LlamaStorage, id: FileUniqueID): Promise<File | un
   const blob = await db.getFile(id);
   if (!record || !blob) return undefined;
   return new File([blob], record.metadata.filename,
-    {type: record.metadata.mimeType});
+      {type: record.metadata.mimeType});
 }

@@ -14,21 +14,25 @@
  *  limitations under the License.
  */
 
-import { LitElement, html } from 'lit';
-import { customElement } from 'lit/decorators.js';
+import {LitElement, html} from 'lit';
+import {customElement} from 'lit/decorators.js';
 
 @customElement('llama-select-fab')
 export class LlamaSelectFab extends LitElement {
   // No internal behaviour is necessary for the header, so avoid creating an
   // open shadow root for this component and default to global styles instead.
-  createRenderRoot() { return this; }
+  createRenderRoot() {
+    return this;
+  }
 
   handleInputChange(event: Event) {
-    if (!(event.target instanceof HTMLInputElement))
-      return;  // method called for an unexpected element
+    if (!(event.target instanceof HTMLInputElement)) {
+      return;
+    } // method called for an unexpected element
 
-    if (!event.target.files || event.target.files.length < 1)
-      return;  // no files were selected
+    if (!event.target.files || event.target.files.length < 1) {
+      return;
+    } // no files were selected
 
     this.dispatchEvent(new CustomEvent('fileselected', {
       detail: event.target.files[0],
