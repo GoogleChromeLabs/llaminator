@@ -4,7 +4,14 @@
         "es2021": true
     },
     "extends": [
-        "google"
+        "google",
+        "plugin:jsonc/recommended-with-json"
+    ],
+    "overrides": [
+      {
+        "files": ["*.json", "*.json5", "*.jsonc"],
+        "parser": "jsonc-eslint-parser"
+      }
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
@@ -12,7 +19,9 @@
         "sourceType": "module"
     },
     "plugins": [
-        "@typescript-eslint"
+        "@typescript-eslint",
+        "json-schema-validator",
+        "jsonc"
     ],
     "rules": {
         "block-spacing": ["error", "always"],
@@ -34,6 +43,16 @@
               "ArrowFunctionExpression": false,
               "FunctionExpression": false
             }
-        }]
+        }],
+        "json-schema-validator/no-invalid": ["error", {
+            "schemas": [
+                {
+                    "fileMatch": ["manifest.json"],
+                    "schema": "https://json.schemastore.org/web-manifest-combined.json"
+                }
+            ],
+            "useSchemastoreCatalog": false
+        }],
+        "jsonc/auto": "error"
     }
 }
