@@ -14,13 +14,13 @@
  *  limitations under the License.
  */
 
-import { html, render } from 'lit-html';
+import { type LlamaSelectFab } from './components/llama-select-fab';
+import { Llaminator } from './llaminator';
 
 import './components/llama-header';
 import './components/llama-item';
 import './components/llama-select-fab';
 import './llaminator.scss';
-import { LlamaStorage, FileUniqueID } from './storage';
 
 if ('serviceWorker' in navigator && process.env.NODE_ENV !== 'development') {
   window.addEventListener('load', () => {
@@ -31,55 +31,13 @@ if ('serviceWorker' in navigator && process.env.NODE_ENV !== 'development') {
 }
 
 window.addEventListener('load', () => {
-  const fileInput = document.querySelector('#input') as HTMLElement;
-  const mainElement = document.querySelector('main') as HTMLElement;
-
   if (!window.indexedDB || !window.URL) { /* TODO: display error message */ }
 
-  const dbPromise = LlamaStorage.create();
-  dbPromise.then(async db => {
-    const id = await db.getCurrentID();
-    if (!id) return;
-
-    const blob = await db.getFile(id);
-    if (!blob) return;
-
-    createOrReplaceVisibleItem(mainElement, dbPromise, id, URL.createObjectURL(blob));
+  const llaminator = new Llaminator({
+    container: document.querySelector('main') as HTMLElement,
+    select: document.querySelector('#input') as LlamaSelectFab,
   });
 
-  fileInput.addEventListener('fileselected', e =>
-      onFileInputChange(e as CustomEvent, mainElement, dbPromise));
+  llaminator.clearContainer();
+  llaminator.populate();
 });
-
-function createOrReplaceVisibleItem(container: HTMLElement,
-                                    dbPromise: Promise<LlamaStorage>,
-                                    id: string,
-                                    src: string): void {
-  // TODO: Support displaying any number of stored items in Llaminator. For now,
-  // remove all existing content from the |container| to ensure that only a
-  // single item is displayed.
-  while (container.children.length) {
-    container.firstChild?.remove();
-  }
-
-  render(html`
-    <llama-item .storage=${dbPromise} id=${id} src=${src}>
-    </llama-item>`, container);
-}
-
-async function onFileInputChange(e: CustomEvent, container: HTMLElement, dbPromise: Promise<LlamaStorage>) {
-  const db = await dbPromise;
-  const file = e.detail as File;
-  const blob = new Blob([await file.arrayBuffer()], { type: file.type });
-
-  const fileRecord = await db.add(blob, {
-    filename: file.name,
-    mimeType: file.type,
-    // title: '',
-  }); // TODO: or update()
-
-  console.log(`stored image as id ${fileRecord.id}`)
-
-  // TODO: perhaps prompt before silently replacing old image, if one exists?
-  createOrReplaceVisibleItem(container, dbPromise, fileRecord.id, URL.createObjectURL(blob));
-}
