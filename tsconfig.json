@@ -5,12 +5,17 @@
     "moduleResolution": "node",
     "esModuleInterop": false,
     "noEmitOnError": true,
-    "lib": ["esnext", "dom", "dom.iterable", "webworker"],
+    "lib": [
+      "esnext",
+      "dom",
+      "dom.iterable",
+      "webworker"
+    ],
     "experimentalDecorators": true,
     "strict": true,
     "baseUrl": "./",
     "rootDir": "./",
-    "outDir": ".tmp/ts",
+    "outDir": ".tmp/ts"
   },
   "include": ["src/**/*.ts"]
 }

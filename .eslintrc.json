@@ -1,58 +1,81 @@
 {
-    "env": {
-        "browser": true,
-        "es2021": true
-    },
-    "extends": [
-        "google",
-        "plugin:jsonc/recommended-with-json"
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": [
+    "google",
+    "plugin:jsonc/recommended-with-json"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "*.json",
+        "*.json5",
+        "*.jsonc"
+      ],
+      "parser": "jsonc-eslint-parser"
+    }
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 13,
+    "sourceType": "module"
+  },
+  "plugins": [
+    "@typescript-eslint",
+    "json-schema-validator",
+    "jsonc"
+  ],
+  "rules": {
+    "block-spacing": [
+      "error",
+      "always"
     ],
-    "overrides": [
+    "brace-style": [
+      "error",
+      "1tbs",
       {
-        "files": ["*.json", "*.json5", "*.jsonc"],
-        "parser": "jsonc-eslint-parser"
+        "allowSingleLine": true
       }
     ],
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-        "ecmaVersion": 13,
-        "sourceType": "module"
-    },
-    "plugins": [
-        "@typescript-eslint",
-        "json-schema-validator",
-        "jsonc"
+    "max-len": [
+      "error",
+      {
+        "code": 100,
+        "tabWidth": 2,
+        "ignoreUrls": true,
+        "ignorePattern": "goog.(module|require)"
+      }
     ],
-    "rules": {
-        "block-spacing": ["error", "always"],
-        "brace-style": ["error", "1tbs", {
-            "allowSingleLine": true
-        }],
-        "max-len": ["error", {
-            "code": 100,
-            "tabWidth": 2,
-            "ignoreUrls": true,
-            "ignorePattern": "goog.(module|require)"
-        }],
-        "object-curly-spacing": ["error", "always"],
-        "require-jsdoc": ["warn", {
-            "require": {
-              "FunctionDeclaration": true,
-              "MethodDefinition": true,
-              "ClassDeclaration": true,
-              "ArrowFunctionExpression": false,
-              "FunctionExpression": false
-            }
-        }],
-        "json-schema-validator/no-invalid": ["error", {
-            "schemas": [
-                {
-                    "fileMatch": ["manifest.json"],
-                    "schema": "https://json.schemastore.org/web-manifest-combined.json"
-                }
-            ],
-            "useSchemastoreCatalog": false
-        }],
-        "jsonc/auto": "error"
-    }
+    "object-curly-spacing": [
+      "error",
+      "always"
+    ],
+    "require-jsdoc": [
+      "warn",
+      {
+        "require": {
+          "FunctionDeclaration": true,
+          "MethodDefinition": true,
+          "ClassDeclaration": true,
+          "ArrowFunctionExpression": false,
+          "FunctionExpression": false
+        }
+      }
+    ],
+    "json-schema-validator/no-invalid": [
+      "error",
+      {
+        "schemas": [
+          {
+            "fileMatch": ["manifest.json"],
+            "schema": "https://json.schemastore.org/web-manifest-combined.json"
+          }
+        ],
+        "useSchemastoreCatalog": false
+      }
+    ],
+    "jsonc/auto": "error"
+  }
 }
