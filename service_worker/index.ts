@@ -21,26 +21,22 @@ import { LlamaStorage } from '../src/storage'; // TODO: move this to a more comm
 
 const cacheName = 'app-cache';
 
-const mainDBName = 'appDB';
-const objStoreName = 'imageStore';
-const mainImageName = 'mainImage';
-
-declare var self: ServiceWorkerGlobalScope;
+declare let self: ServiceWorkerGlobalScope;
 
 precacheAndRoute(self.__WB_MANIFEST);
 
 registerRoute(
-  ({url}) => url.pathname.endsWith('/share-target'),
-  async ({request}) => {
-    const data = await request.formData();
+    ({ url }) => url.pathname.endsWith('/share-target'),
+    async ({ request }) => {
+      const data = await request.formData();
 
-    if (!indexedDB) { /* TODO: display error message */ }
+      if (!indexedDB) { /* TODO: display error message */ }
 
-    // TODO: handle invalid share
-    storeFile(data.get('image') as File, await LlamaStorage.create());
-    return Response.redirect('/', 302);
-  },
-  'POST'
+      // TODO: handle invalid share
+      storeFile(data.get('image') as File, await LlamaStorage.create());
+      return Response.redirect('/', 302);
+    },
+    'POST',
 );
 
 async function storeFile(file: File, db: LlamaStorage) {
@@ -52,12 +48,12 @@ async function storeFile(file: File, db: LlamaStorage) {
     // title: '',
   }); // TODO: or update()
   // TODO: display "saving..." message/spinner?
-  console.log(`stored image as id ${fileRecord.id}`)
+  console.log(`stored image as id ${fileRecord.id}`);
 }
 
 registerRoute(
-  ({url}) => true,
-  new StaleWhileRevalidate({
-    cacheName: cacheName
-  })
+    ({ url }) => true,
+    new StaleWhileRevalidate({
+      cacheName: cacheName,
+    }),
 );
