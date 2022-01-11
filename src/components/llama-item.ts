@@ -47,12 +47,12 @@ export class LlamaItem extends LitElement {
       return;
     }
 
-    const file = new File([ blob ], record.metadata.filename, {
+    const file = new File([blob], record.metadata.filename, {
       type: record.metadata.mimeType,
     });
 
-    if (navigator.canShare({ files: [ file ] })) {
-      navigator.share({ files: [ file ] });
+    if (navigator.canShare({ files: [file] })) {
+      navigator.share({ files: [file] });
     }
   }
 

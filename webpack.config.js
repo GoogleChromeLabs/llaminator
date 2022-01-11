@@ -78,7 +78,7 @@ module.exports = (env, options) => {
               options: {
                 implementation: require('sass'),
               },
-            }
+            },
           ],
         },
         {
@@ -97,10 +97,10 @@ module.exports = (env, options) => {
       port: 4629,
     },
     output: {
-      filename: options.mode === 'production' ? '[name].[contenthash].js'
-                                              : '[name].js',
+      filename: options.mode === 'production' ? '[name].[contenthash].js' :
+                                              '[name].js',
       path: path.resolve(__dirname, 'dist'),
       clean: true,
-    }
+    },
   };
 };

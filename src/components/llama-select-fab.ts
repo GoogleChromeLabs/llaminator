@@ -24,11 +24,9 @@ export class LlamaSelectFab extends LitElement {
   createRenderRoot() { return this; }
 
   handleInputChange(event: Event) {
-    if (!(event.target instanceof HTMLInputElement))
-      return;  // method called for an unexpected element
+    if (!(event.target instanceof HTMLInputElement)) { return; } // method called for an unexpected element
 
-    if (!event.target.files || event.target.files.length < 1)
-      return;  // no files were selected
+    if (!event.target.files || event.target.files.length < 1) { return; } // no files were selected
 
     this.dispatchEvent(new CustomEvent('fileselected', {
       detail: event.target.files[0],
