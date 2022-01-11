@@ -14,6 +14,10 @@
  *  limitations under the License.
  */
 
+// Note: There is a bug with puppeteer/jest-puppeteer that will cause tests to fail if run with
+// puppeteer 13.
+// See https://github.com/smooth-code/jest-puppeteer/issues/461.
+
 module.exports = {
   server: {
     command: 'npx webpack serve --port 8888 --mode=production',
