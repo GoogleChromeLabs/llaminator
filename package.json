@@ -4,6 +4,7 @@
   "description": "Llaminator helps you store and access images directly from your browser.",
   "scripts": {
     "build": "webpack --mode=production",
+    "fix": "eslint --fix './**/*.js' './**/*.ts' './**/*.json'",
     "lint": "eslint './**/*.js' './**/*.ts' './**/*.json'",
     "serve": "webpack serve --open --mode=development",
     "test": "jest"
