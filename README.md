@@ -57,6 +57,31 @@ npm run-script build
 Note: this probably won't be part of our typical development workflow,
 so expect it to break from time to time.
 
+## Coding Style
+
+The source of truth is `npm run-script lint`, which is configured by
+[.eslintrc.json](.eslintrc.json). To automatically fix as many lint errors as
+possible, rather than just printing them out, you can instead run `npm
+run-script fix`.
+
+This project expects LF line endings, not CRLF (and this is enforced by
+eslint). That means that Windows users may want to configure their local
+`.git/config` as follows:
+
+```gitconfig
+[core]
+  autocrlf = input
+```
+
+(See https://git-scm.com/book/en/v2/Customizing-Git-Git-Configuration for
+documentation about this option).
+
+If you choose to do the above, remember to also configure your text editor to
+read and write using LF rather than CRLF. For convenience, this project contains a
+[.editorconfig](.editorconfig) file capable of setting this up in many popular
+editors, though some may need plugins. See https://editorconfig.org/ for more
+details and plugin installation instructions.
+
 ## Contributing
 
 See [CONTRIBUTING](./CONTRIBUTING.md) for more.
