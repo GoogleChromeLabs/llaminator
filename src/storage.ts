@@ -140,11 +140,11 @@ export class LlamaStorage {
 
   // At least one of |file| and |metadata| must be provided.
   async update(id: FileUniqueID, file?: Blob, metadata?: FileMetadata): Promise<FileRecord> {
-    if (!file && !metadata) throw 'neither |file| nor |metadata| was provided';
+    if (!file && !metadata) throw new TypeError('neither |file| nor |metadata| was provided');
 
     const now = Date.now();
     const record = await this.db.get('metadata', id);
-    if (!record) throw `no record found for id '${id}'`;
+    if (!record) throw new ReferenceError(`no record found for id '${id}'`);
     if (metadata) {
       record.metadata = metadata;
       record.metadataModified = now;
