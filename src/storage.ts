@@ -151,4 +151,20 @@ export class LlamaStorage {
 
     return record;
   }
+
+  /**
+   * Deletes an image and its metadata from storage.
+   *
+   * @param {FileUniqueID} id - the file identifier.
+   */
+  async delete(id: FileUniqueID): Promise<void> {
+    const tx = this.db.transaction(['blob', 'metadata'], 'readwrite');
+
+    await Promise.allSettled([
+      await tx.objectStore('blob').delete(id),
+      await tx.objectStore('metadata').delete(id),
+      await tx.done,
+    ]);
+    console.log(`deleted '${id}'`);
+  }
 }
