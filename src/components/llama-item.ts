@@ -28,7 +28,7 @@ export class LlamaItem extends LitElement {
   @property({ type: Object }) storage?: Promise<LlamaStorage>;
   @property({ type: String }) src: string = '';
 
-  // No internal behaviour is necessary for the header, so avoid creating an
+  // No internal behaviour is necessary for the item, so avoid creating an
   // open shadow root for this component and default to global styles instead.
   createRenderRoot() { return this; }
 
@@ -56,6 +56,27 @@ export class LlamaItem extends LitElement {
     }
   }
 
+  /**
+   * Deletes an item from storage and removes it from the UI.
+   *
+   * @todo Should the db interaction be happening here or in llaminator.ts? Same with
+   *     shareItem() - should it be an event that llaminator.ts handles?
+   */
+  async deleteItem() {
+    if (!this.storage) {
+      console.warn('Unable to share this item: @storage property not set.');
+      return;
+    }
+
+    const db = await this.storage;
+    await db.delete(this.id);
+
+    this.dispatchEvent(new CustomEvent('itemdeleted', {
+      bubbles: true,
+      detail: this.id,
+    }));
+  }
+
   render() {
     return html`
       <div class="mdc-card">
@@ -75,7 +96,12 @@ export class LlamaItem extends LitElement {
                       @click=${this.shareItem}>
                 share
               </button>`}
-            <!-- TODO: Add the option to remove this item -->
+            <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon"
+                    title="Share this item"
+                    @click=${this.deleteItem}>
+              <!-- TODO: Add confirmation prompt before deleting -->
+              delete
+            </button>
           </div>
         </div>
       </div>`;

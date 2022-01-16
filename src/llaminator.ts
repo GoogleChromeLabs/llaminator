@@ -50,6 +50,8 @@ export class Llaminator {
     // Set up event listeners on the elements.
     this.elements.select.addEventListener(
         'fileselected', Llaminator.prototype.onFileSelected.bind(this));
+    this.elements.container.addEventListener(
+        'itemdeleted', Llaminator.prototype.onItemDeleted.bind(this));
   }
 
   /**
@@ -112,6 +114,16 @@ export class Llaminator {
 
     console.log(`stored image as id ${fileRecord.id}`);
 
+    await this.populate();
+  }
+
+  /**
+   * Called when a file has been deleted from storage.
+   *
+   * @param {Event} event The `CustomEvent` instance, with its detail being the id of the deleted
+   *     item.
+   */
+  async onItemDeleted(event: Event) {
     await this.populate();
   }
 }
