@@ -97,7 +97,7 @@ export class LlamaItem extends LitElement {
                 share
               </button>`}
             <button class="material-icons mdc-icon-button mdc-card__action mdc-card__action--icon"
-                    title="Share this item"
+                    title="Delete this item"
                     @click=${this.deleteItem}>
               <!-- TODO: Add confirmation prompt before deleting -->
               delete
