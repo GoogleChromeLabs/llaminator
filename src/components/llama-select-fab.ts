@@ -15,10 +15,12 @@
  */
 
 import { LitElement, html } from 'lit';
-import { customElement } from 'lit/decorators.js';
+import { customElement, query } from 'lit/decorators.js';
 
 @customElement('llama-select-fab')
 export class LlamaSelectFab extends LitElement {
+  @query('#select') fileInput?: HTMLInputElement;
+
   // No internal behaviour is necessary for the header, so avoid creating an
   // open shadow root for this component and default to global styles instead.
   createRenderRoot() { return this; }
@@ -42,6 +44,7 @@ export class LlamaSelectFab extends LitElement {
         <button class="mdc-fab mdc-fab--touch">
           <label aria-label="Select a file to store in Llaminator" for="select">
             <input type="file" accept="image/*" id="select" hidden
+                   @click=${() => { if (this.fileInput) { this.fileInput.value = ''; } }}
                    @change=${this.handleInputChange} />
             <div class="mdc-fab__ripple"></div>
             <span class="material-icons mdc-fab__icon">file_upload</span>
