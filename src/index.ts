@@ -17,6 +17,7 @@
 import { type LlamaSelectFab } from './components/llama-select-fab';
 import { Llaminator } from './llaminator';
 
+import './components/layouts/llama-vertical-scroll-layout';
 import './components/llama-header';
 import './components/llama-item';
 import './components/llama-select-fab';
@@ -33,11 +34,14 @@ if ('serviceWorker' in navigator && process.env.NODE_ENV !== 'development') {
 window.addEventListener('load', () => {
   if (!window.indexedDB || !window.URL) { /* TODO: display error message */ }
 
+  const urlSearchParams = new URLSearchParams(window.location.search);
+  const layoutParam = urlSearchParams.get('layout');
+  const layout = layoutParam ? layoutParam : 'vertical-scroll';
+
   const llaminator = new Llaminator({
     container: document.querySelector('main') as HTMLElement,
     select: document.querySelector('#input') as LlamaSelectFab,
-  });
+  }, layout);
 
-  llaminator.clearContainer();
-  llaminator.populate();
+  llaminator.resetContainer();
 });

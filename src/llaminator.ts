@@ -14,10 +14,11 @@
  *  limitations under the License.
  */
 
-import { html, render } from 'lit-html';
+import { render } from 'lit-html';
 
 import { type LlamaSelectFab } from './components/llama-select-fab';
 import { LlamaStorage } from './storage';
+import { LlamaVerticalScrollLayout } from './components/layouts/llama-vertical-scroll-layout';
 
 /**
  * HTML elements that have to exist in order for Llaminator to be functional. Passed in to the
@@ -35,6 +36,10 @@ interface LlaminatorElements {
   select: LlamaSelectFab;
 }
 
+interface Layout {
+  refresh(database: LlamaStorage): void;
+}
+
 /**
  * Main class of the Llaminator application, which encapsulates the main functionality of the app.
  * Is given a series of HTML elements (`LlaminatorElements`) in which the app is to be rendered.
@@ -42,8 +47,16 @@ interface LlaminatorElements {
 export class Llaminator {
   private readonly elements: LlaminatorElements;
   private readonly storage: Promise<LlamaStorage>;
+  private readonly layout: Layout;
 
-  constructor(elements: LlaminatorElements) {
+  /**
+   * Constructs a Llaminator instance.
+   *
+   * @param {LlaminatorElements} elements Key DOM elements needed by Llaminator.
+   * @param {string} layout String describing the layout to render. Defaults to
+   *     LlamaVerticalScrollLayout if the string is empty or otherwise doesn't make sense.
+   */
+  constructor(elements: LlaminatorElements, layout: string) {
     this.elements = elements;
     this.storage = LlamaStorage.create();
 
@@ -52,45 +65,26 @@ export class Llaminator {
         'fileselected', Llaminator.prototype.onFileSelected.bind(this));
     this.elements.container.addEventListener(
         'itemdeleted', Llaminator.prototype.onItemDeleted.bind(this));
+
+    switch (layout) {
+      default:
+        this.layout = new LlamaVerticalScrollLayout();
+        break;
+    }
   }
 
   /**
-   * Clears the existing content from the container.
+   * Clears the existing content from the container, then renders |this.layout| in it.
    */
-  clearContainer() {
+  async resetContainer() {
     const { container } = this.elements;
 
     while (container.firstChild) {
       container.firstChild.remove();
     }
-  }
 
-  /**
-   * Populates all stored items in the container. Right now this works by removing all items from
-   * the container, and then repopulating it with everything known in Llaminator. This will be
-   * revisited when we decide on ranking, lazy updating, and item removal.
-   */
-  async populate() {
-    const { container } = this.elements;
-
-    const database = await this.storage;
-    const items = [];
-
-    for (const item of await database.list()) {
-      const blob = await database.getFile(item.id);
-      if (!blob) {
-        // TODO: Display an error, or prune this item from the database.
-        continue;
-      }
-
-      const url = URL.createObjectURL(blob);
-
-      items.push(html`
-          <llama-item .storage=${database} id=${item.id} src=${url}>
-          </llama-item>`);
-    }
-
-    render(items, container);
+    render(this.layout, this.elements.container);
+    this.layout.refresh(await this.storage);
   }
 
   /**
@@ -114,7 +108,7 @@ export class Llaminator {
 
     console.log(`stored image as id ${fileRecord.id}`);
 
-    await this.populate();
+    await this.layout.refresh(database);
   }
 
   /**
@@ -124,6 +118,6 @@ export class Llaminator {
    *     item.
    */
   async onItemDeleted(event: Event) {
-    await this.populate();
+    await this.layout.refresh(await this.storage);
   }
 }
