@@ -9,6 +9,26 @@ To expand all:
 document.querySelectorAll('article details').forEach((e) => e.setAttribute('open', ''))
 ```
 
+### 2022-01-28 - Lit doesn't always work in intuitive ways
+
+https://github.com/GoogleChromeLabs/llaminator/pull/86
+
+<details>
+  <summary>more</summary>
+
+  > A couple of unintuitive things I ran into with Lit:
+  > * updating an array that is bound to the custom element's
+  >   html template doesn't seem to trigger an update (unless
+  >   I was doing it wrong somehow)
+  > * calling an element's `render()` function doesn't actually
+  >   render anything. Especially confusing given that Lit's
+  >   [other render function](https://github.com/GoogleChromeLabs/llaminator/commit/98a31481959cf1b15702aae3d62bae99f9c51548#diff-fdd4d1941d86cf4fd26f29614c10f2b6b6baccb1d46b6eaa4e357768ef555fadR86)
+  >   does actually trigger rendering.
+  >
+  > Admittedly these are both probably "RTFM" issues, but still
+  > seem quite unintuitive to me.
+</details>
+
 ### 2022-01-17 - file input `onchange` event doesn't fire if you pick the same image multiple times
 
 Reported in
