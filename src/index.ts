@@ -17,6 +17,7 @@
 import { type LlamaSelectFab } from './components/llama-select-fab';
 import { Llaminator } from './llaminator';
 
+import './components/layouts/llama-thumbnail-grid-layout';
 import './components/layouts/llama-vertical-scroll-layout';
 import './components/llama-header';
 import './components/llama-item';

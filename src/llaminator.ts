@@ -19,6 +19,7 @@ import { render } from 'lit-html';
 import { type LlamaLayout } from './llama-layout';
 import { type LlamaSelectFab } from './components/llama-select-fab';
 import { LlamaStorage } from './storage';
+import { LlamaThumbnailGridLayout } from './components/layouts/llama-thumbnail-grid-layout';
 import { LlamaVerticalScrollLayout } from './components/layouts/llama-vertical-scroll-layout';
 
 /**
@@ -64,6 +65,10 @@ export class Llaminator {
         'itemdeleted', Llaminator.prototype.onItemDeleted.bind(this));
 
     switch (layout) {
+      case 'thumbnail-grid':
+        this.layout = new LlamaThumbnailGridLayout();
+        break;
+
       default:
         this.layout = new LlamaVerticalScrollLayout();
         break;
