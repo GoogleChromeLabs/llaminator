@@ -16,6 +16,7 @@
 
 import { render } from 'lit-html';
 
+import { type LlamaLayout } from './llama-layout';
 import { type LlamaSelectFab } from './components/llama-select-fab';
 import { LlamaStorage } from './storage';
 import { LlamaVerticalScrollLayout } from './components/layouts/llama-vertical-scroll-layout';
@@ -36,10 +37,6 @@ interface LlaminatorElements {
   select: LlamaSelectFab;
 }
 
-interface Layout {
-  refresh(database: LlamaStorage): void;
-}
-
 /**
  * Main class of the Llaminator application, which encapsulates the main functionality of the app.
  * Is given a series of HTML elements (`LlaminatorElements`) in which the app is to be rendered.
@@ -47,7 +44,7 @@ interface Layout {
 export class Llaminator {
   private readonly elements: LlaminatorElements;
   private readonly storage: Promise<LlamaStorage>;
-  private readonly layout: Layout;
+  private readonly layout: LlamaLayout;
 
   /**
    * Constructs a Llaminator instance.
@@ -83,8 +80,8 @@ export class Llaminator {
       container.firstChild.remove();
     }
 
-    render(this.layout, this.elements.container);
     this.layout.refresh(await this.storage);
+    render(this.layout, this.elements.container);
   }
 
   /**

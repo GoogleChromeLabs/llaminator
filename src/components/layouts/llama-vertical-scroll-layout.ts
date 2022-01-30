@@ -14,24 +14,29 @@
  *  limitations under the License.
  */
 
-import { LitElement, html, TemplateResult } from 'lit';
+import { LitElement, TemplateResult, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 
+import { LlamaLayout } from '../../llama-layout';
 import { LlamaStorage } from '../../storage';
 
 @customElement('llama-vertical-scroll-layout')
 /**
  * Default Llaminator layout - renders all items at once, vertically in a single column, and lets
- * the browser handle scrolling in the normal way. Implements ../../llaminator.Layout.
+ * the browser handle scrolling in the normal way.
  */
-export class LlamaVerticalScrollLayout extends LitElement {
+export class LlamaVerticalScrollLayout extends LitElement implements LlamaLayout {
+  /**
+   * html templates of LlamaItems.
+   */
+  items: TemplateResult[] = [];
+
   /**
    * This component needs an open shadow root because LlamaItem depends on it.
    *
    * @return {LlamaVerticalScrollLayout} The current instance.
    */
   createRenderRoot() { return this; }
-  items: TemplateResult[] = [];
 
   /**
    * Refreshes (ie, renders) the layout's contents from the database.
