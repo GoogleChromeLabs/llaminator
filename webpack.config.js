@@ -21,6 +21,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { InjectManifest } = require('workbox-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = (env, options) => {
   const plugins = [
@@ -41,6 +42,9 @@ module.exports = (env, options) => {
       analyzerMode: 'static',
       openAnalyzer: false,
       reportFilename: 'index-sizes.html',
+    }),
+    new MiniCssExtractPlugin({
+      filename: '[name].css',
     }),
   ];
 
@@ -65,14 +69,13 @@ module.exports = (env, options) => {
         {
           test: /\.scss$/,
           use: [
+            MiniCssExtractPlugin.loader,
             {
-              loader: 'file-loader',
+              loader: 'css-loader',
               options: {
-                name: 'llaminator.css',
+                sourceMap: true,
               },
             },
-            { loader: 'extract-loader' },
-            { loader: 'css-loader' },
             {
               loader: 'sass-loader',
               options: {
@@ -95,6 +98,18 @@ module.exports = (env, options) => {
       },
       compress: true,
       port: 4629,
+    },
+    optimization: {
+      splitChunks: {
+        cacheGroups: {
+          styles: {
+            name: 'llaminator',
+            type: 'css/mini-extract',
+            chunks: 'all',
+            enforce: true,
+          },
+        },
+      },
     },
     output: {
       filename: options.mode === 'production' ? '[name].[contenthash].js' :

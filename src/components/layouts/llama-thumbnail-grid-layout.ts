@@ -17,6 +17,7 @@
 import { customElement } from 'lit/decorators.js';
 
 import { LlamaVerticalScrollLayout } from './llama-vertical-scroll-layout';
+import './llama-thumbnail-grid-layout.scss';
 
 @customElement('llama-thumbnail-grid-layout')
 /**

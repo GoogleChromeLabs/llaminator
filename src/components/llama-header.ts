@@ -17,6 +17,8 @@
 import { LitElement, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
+import './llama-header.scss';
+
 @customElement('llama-header')
 export class LlamaHeader extends LitElement {
   @property({ type: String }) title: string = 'Untitled';

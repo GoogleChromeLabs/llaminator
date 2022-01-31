@@ -18,6 +18,7 @@ import { LitElement, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
 import { LlamaStorage } from '../storage';
+import './llama-item.scss';
 
 // Whether the Web Share API has been exposed on the browser's Navigator object.
 const kWebShareExposed = 'share' in navigator && 'canShare' in navigator;

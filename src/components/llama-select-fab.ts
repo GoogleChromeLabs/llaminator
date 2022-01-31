@@ -17,6 +17,8 @@
 import { LitElement, html } from 'lit';
 import { customElement, query } from 'lit/decorators.js';
 
+import './llama-select-fab.scss';
+
 @customElement('llama-select-fab')
 export class LlamaSelectFab extends LitElement {
   @query('#select') fileInput?: HTMLInputElement;
