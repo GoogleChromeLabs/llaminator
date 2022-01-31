@@ -9,6 +9,95 @@ To expand all:
 document.querySelectorAll('article details').forEach((e) => e.setAttribute('open', ''))
 ```
 
+### 2022-01-30 - how do you import a CSS file to be scoped to a particular shadow-dom component?
+
+https://github.com/GoogleChromeLabs/llaminator/pull/87
+
+<details>
+  <summary>more</summary>
+
+  > our build system isn't currently able to import CSS (we need another
+  > loader, which is probably easy enough). But ideally what I'm hoping for is
+  > something closer to
+  > [this](https://github.com/glennhartmann/llaminator/commit/6d302b00cd0b11747ae9dc7e32ee3a1a7e81a7ee)
+  > (on top of this PR), where each element knows its own style and we don't
+  > need to worry about global namespacing - and where we don't run into
+  > problems if any ancestor of a llama-item ever wants to have a shadow-root.
+  > (This could be done _in combination_ with your suggestion, if it's cleaner
+  > to keep css outside of ts files).
+  >
+  > The problem with [that
+  > commit](https://github.com/glennhartmann/llaminator/commit/6d302b00cd0b11747ae9dc7e32ee3a1a7e81a7ee)
+  > at the moment is that it causes extra FOUC by having elements lower in the
+  > tree depending on external assets. Maybe using
+  > https://www.npmjs.com/package/material-icons could solve that - but that
+  > may also increase our bundle size by who knows how much. Then again, it's
+  > also possible that our bundle size is currently a bit of a lie, because
+  > we're making users fetch assets from outside of our bundle.
+  >
+  > wdyt?
+
+  > well time for another rant. I spent the past not-quite-sure-how-long
+  > frustratingly trying to import npmjs.com/package/material-icons directly
+  > into a particular shadow-dom custom element, and gotten nowhere.
+  >
+  > [From what I can
+  > tell](https://lit.dev/docs/components/styles/#styles-in-the-template), if
+  > you don't use global styles, the "right way" to specify css is directly in
+  > [lit `css` tags](https://lit.dev/docs/components/styles/#add-styles), as
+  > adding them in the `html` templates will cause them to get loaded
+  > per-element and be inefficient and FOUC.
+  >
+  > However, no [lit documentation](https://lit.dev/docs/components/styles/) I
+  > can find mentions anything about importing css into a `css` tag template. I
+  > believe (at some point) I tried importing with regular css `@import url`
+  > commands, but couldn't get that to work.
+  >
+  > `import 'material-icons/iconfont/filled.css';` (assuming webpack is set up
+  > to use [css-loader](https://webpack.js.org/loaders/css-loader/) (_and_
+  > `style-loader` - it's still not clear to me why there need to be 2), then
+  > it'll take care of importing things like the button icon "fonts" into the
+  > project, and making the proper styles globally available on the page (I
+  > think), but it doesn't provide a way to use it only within the scope of a
+  > custom element - the `import` statement doesn't give you access to the
+  > actual contents of the CSS file from within js/ts (doesn't seem like that
+  > should be so difficult).
+  >
+  > I also tried looking into using [css modules and/or the
+  > MiniCssExtractPlugin
+  > plugin](https://blog.jakoblind.no/css-modules-webpack/), but neither of
+  > those really addressed the problem (I would still need to import the styles
+  > using a `<link>` or `<style>` in the `html` template).
+  >
+  > I also considered trying out
+  > [raw-loader](https://v4.webpack.js.org/loaders/raw-loader/), but IIUC,
+  > using that instead of `css-loader`+`style-loader` means that none of the
+  > imports inside the CSS file will get resolved properly?
+  >
+  > Looking a bit deeper, it's possible that changing [css-loader's
+  > exportType](https://webpack.js.org/loaders/css-loader/#options) might help?
+  > Kind of at the point of giving up for now, though.
+  >
+  > Just for the sake of completeness, [material-components-web's
+  > documentation](https://github.com/material-components/material-components-web/tree/master/packages/mdc-button)
+  > also didn't really help at all.
+  >
+  > At least [I'm not the only
+  > one](https://forum.freecodecamp.org/t/using-external-css-in-a-web-component-with-webpack/326307)
+  > who's gone through this, but I don't really understand their solution.
+  >
+  > ```
+  > import styles from './main.style.css';
+  > ```
+  >
+  > what is in `main.style.css`? I tried that on my css file and it complained
+  > because there was no `styles` to import from not-a-javascript-file. Seems
+  > they're using the same loaders I tried... Is `main.style.css` already a
+  > javascript file that contains css declarations? If I knew how to generate
+  > that file as part of the build, then I would be able to import it easily
+  > enough.
+</details>
+
 ### 2022-01-28 - Lit doesn't always work in intuitive ways
 
 https://github.com/GoogleChromeLabs/llaminator/pull/86
