@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-import { StaleWhileRevalidate } from 'workbox-strategies';
+import { NetworkOnly, StaleWhileRevalidate } from 'workbox-strategies';
 import { precacheAndRoute } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
 import { LlamaStorage } from '../src/storage'; // TODO: move this to a more common place?
@@ -24,6 +24,12 @@ const cacheName = 'app-cache';
 declare let self: ServiceWorkerGlobalScope;
 
 precacheAndRoute(self.__WB_MANIFEST);
+
+// Don't waste the user's local storage on Easter Eggs.
+registerRoute(
+    ({ url }) => url.pathname.includes('/easter-eggs/'),
+    new NetworkOnly(),
+);
 
 registerRoute(
     ({ url }) => url.pathname.endsWith('/share-target'),

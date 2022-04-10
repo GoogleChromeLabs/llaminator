@@ -54,6 +54,7 @@ module.exports = (env, options) => {
   // https://github.com/GoogleChrome/workbox/issues/1790
   if (options.mode !== 'development') {
     plugins.push(new InjectManifest({
+      exclude: ['easter-eggs/'],
       swSrc: './service_worker/index.ts',
       swDest: path.join(path.resolve(__dirname, 'dist'), 'sw.js'),
     }));
