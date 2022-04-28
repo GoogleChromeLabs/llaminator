@@ -172,8 +172,10 @@ export class EasterEgg {
    * @return {Promise<HexString>} Promise to the salted hash of the password.
    */
   private static async hashWithSalt(password: ArrayBuffer, salt: ArrayBuffer): Promise<HexString> {
-    const saltedPW: ArrayBuffer = (new Uint8Array([...new Uint8Array(password)]
-        .concat([...new Uint8Array(salt)]))).buffer;
+    const passwordArray: number[] = [...new Uint8Array(password)];
+    const saltArray: number[] = [...new Uint8Array(salt)];
+    const saltedPWArray: number[] = passwordArray.concat(saltArray);
+    const saltedPW: ArrayBuffer = (new Uint8Array(saltedPWArray)).buffer;
     return EasterEgg.arrayBufferToHexStr(
         await window.crypto.subtle.digest(EasterEgg.digestAlgo, saltedPW));
   }

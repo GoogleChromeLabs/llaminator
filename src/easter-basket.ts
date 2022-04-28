@@ -16,7 +16,7 @@
 
 import { EasterEgg } from './easter-egg';
 
-export const easterEggs: EasterEgg[] = [
+export const kEasterEggs: EasterEgg[] = [
   new EasterEgg({
     ciphertext: EasterEgg.ciphertextFileFetcherer('001'),
     derivedKeySalt: '5a:36:38:39:9e:45:91:35:df:0c:8d:52:ed:b8:e3:4f:b3:87:10:9e:89:da:7f:7e:4f:' +
