@@ -16,6 +16,8 @@
 
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
 import { v4 as uuidv4 } from 'uuid';
+import { ref, uploadBytes, UploadMetadata, UploadResult } from 'firebase/storage';
+import { firebaseStorage } from './firebase';
 
 const kMainDBName = 'appDB';
 
@@ -93,11 +95,29 @@ export class LlamaStorage {
     };
 
     const tx = this.db.transaction(['blob', 'metadata'], 'readwrite');
+
+    let uploadTask: Promise<UploadResult> | null = null;
+    if (firebaseStorage) {
+      // Note that as bad as this looks, security-wise, there will be server-side protection
+      // against the user modifying unintended locations.
+      const storageRef = ref(firebaseStorage, 'public/' + metadata.filename);
+      const firebaseMeta: UploadMetadata = {
+        contentType: metadata.mimeType,
+        customMetadata: metadata,
+      };
+      uploadTask = uploadBytes(storageRef, file, firebaseMeta);
+    }
+
     await Promise.allSettled([
       tx.objectStore('blob').put(file, id),
       tx.objectStore('metadata').put(record, id),
       tx.done,
     ]);
+    if (uploadTask) {
+      // TODO: we should allow this in the background, not have it block (and also handle errors,
+      // etc)
+      await uploadTask;
+    }
     console.log(`successfully added '${id}'`);
     return record;
   }

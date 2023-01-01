@@ -23,6 +23,7 @@ import './components/llama-header';
 import './components/llama-item';
 import './components/llama-select-fab';
 import './llaminator.scss';
+import { firebaseInit } from './firebase';
 
 if ('serviceWorker' in navigator && process.env.NODE_ENV !== 'development') {
   window.addEventListener('load', () => {
@@ -38,6 +39,15 @@ window.addEventListener('load', () => {
   const urlSearchParams = new URLSearchParams(window.location.search);
   const layoutParam = urlSearchParams.get('layout');
   const layout = layoutParam ? layoutParam : 'vertical-scroll';
+
+  const firebaseSyncParam = urlSearchParams.get('firebase-sync');
+  let firebaseSync = firebaseSyncParam ? firebaseSyncParam === 'true' : false;
+  if (firebaseSync) {
+    firebaseSync = firebaseInit();
+  }
+  if (firebaseSync) {
+    (document.querySelector('#firebase-warning') as HTMLElement).style.display = 'block';
+  }
 
   const llaminator = new Llaminator({
     container: document.querySelector('main') as HTMLElement,
