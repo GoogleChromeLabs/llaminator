@@ -145,8 +145,18 @@ export class LlamaStorage {
       }
     }
 
-    // TODO: filter out dupes
-    return results;
+    const m: { [key: string]: boolean } = {};
+    return results.filter((v: FileRecord) => {
+      let id = v.id;
+      if (id.indexOf(remoteIdPrefix) === 0) {
+        id = id.slice(remoteIdPrefix.length);
+      }
+      if (m.hasOwnProperty(id)) {
+        return false;
+      }
+      m[id] = true;
+      return true;
+    });
   }
 
   async getFile(id: FileUniqueID): Promise<Blob | undefined> {
