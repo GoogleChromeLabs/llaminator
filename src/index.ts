@@ -41,10 +41,7 @@ window.addEventListener('load', () => {
   const layout = layoutParam ? layoutParam : 'vertical-scroll';
 
   const firebaseSyncParam = urlSearchParams.get('firebase-sync');
-  let firebaseSync = firebaseSyncParam ? firebaseSyncParam === 'true' : false;
-  if (firebaseSync) {
-    firebaseSync = firebaseInit();
-  }
+  const firebaseSync = firebaseSyncParam === 'true' ? firebaseInit() : false;
   if (firebaseSync) {
     (document.querySelector('#firebase-warning') as HTMLElement).style.display = 'block';
   }

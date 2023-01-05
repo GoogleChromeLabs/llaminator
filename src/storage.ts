@@ -96,7 +96,7 @@ export class LlamaStorage {
 
     const tx = this.db.transaction(['blob', 'metadata'], 'readwrite');
 
-    let uploadTask: Promise<UploadResult> | null = null;
+    let uploadTask: Promise<UploadResult | null> = Promise.resolve(null);
     if (firebaseStorage) {
       // Note that as bad as this looks, security-wise, there will be server-side protection
       // against the user modifying unintended locations.
@@ -112,12 +112,11 @@ export class LlamaStorage {
       tx.objectStore('blob').put(file, id),
       tx.objectStore('metadata').put(record, id),
       tx.done,
-    ]);
-    if (uploadTask) {
+
       // TODO: we should allow this in the background, not have it block (and also handle errors,
       // etc)
-      await uploadTask;
-    }
+      uploadTask,
+    ]);
     console.log(`successfully added '${id}'`);
     return record;
   }
