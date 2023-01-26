@@ -20,7 +20,7 @@ import { getStorage, FirebaseStorage } from 'firebase/storage';
 
 // Replace |firebaseConfig| with your instance's config, but DO NOT commit it.
 // TODO: the config should probably be in a separate JSON file.
-const firebaseConfig = null;
+export const firebaseConfig = null;
 
 let app: FirebaseApp | null = null;
 export let firebaseStorage: FirebaseStorage | null = null;

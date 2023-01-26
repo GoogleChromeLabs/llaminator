@@ -36,6 +36,13 @@ module.exports = (env, options) => {
     new HtmlWebpackPlugin({
       template: 'src/index.html',
       inject: 'body',
+      chunks: ['llaminator'],
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'sign-in.html',
+      template: 'src/sign-in.html',
+      inject: 'body',
+      chunks: ['signin'],
     }),
     new CssMinimizerPlugin(),
     new BundleAnalyzerPlugin({
@@ -61,7 +68,10 @@ module.exports = (env, options) => {
   }
 
   return {
-    entry: { llaminator: './src/index.ts' },
+    entry: {
+      llaminator: './src/index.ts',
+      signin: './src/components/llama-sign-in.ts',
+    },
     resolve: {
       extensions: ['.ts', '.tsx', '.js'],
     },
@@ -90,6 +100,18 @@ module.exports = (env, options) => {
           use: 'ts-loader',
           exclude: /node_modules/,
         },
+        {
+          test: /\.css$/,
+          use: [
+            MiniCssExtractPlugin.loader,
+            {
+              loader: 'css-loader',
+              options: {
+                sourceMap: true,
+              },
+            },
+          ],
+        },
       ],
     },
     plugins,
@@ -104,7 +126,6 @@ module.exports = (env, options) => {
       splitChunks: {
         cacheGroups: {
           styles: {
-            name: 'llaminator',
             type: 'css/mini-extract',
             chunks: 'all',
             enforce: true,

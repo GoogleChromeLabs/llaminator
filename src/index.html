@@ -28,9 +28,14 @@
   </head>
   <body>
     <llama-header title="Llaminator!"></llama-header>
-    <center id="firebase-warning" class="mdc-top-app-bar--fixed-adjust" style="display: none;">
-      <h3>WARNING: Firebase sync is enabled. Any images you add will be uploaded to a public storage bucket.</h3>
-    </center>
+    <div id="firebase-stuff" style="display: none;">
+      <!-- TODO: it would be nice to move the sign-in button into a menu in the header or
+        something -->
+      <llama-sign-in-out-button class="mdc-top-app-bar--fixed-adjust"></llama-sign-in-out-button>
+      <center class="mdc-top-app-bar--fixed-adjust">
+        <h3>WARNING: Firebase sync is enabled. Any images you add will be uploaded to a public storage bucket.</h3>
+      </center>
+    </div>
     <main class="mdc-top-app-bar--fixed-adjust">
       <!-- Items stored in Llaminator will be rendered here. -->
       <!-- TODO: Avoid the flash-of-unavailable-content (FOUC) -->

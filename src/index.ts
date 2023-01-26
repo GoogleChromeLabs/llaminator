@@ -22,6 +22,7 @@ import './components/layouts/llama-vertical-scroll-layout';
 import './components/llama-header';
 import './components/llama-item';
 import './components/llama-select-fab';
+import './components/llama-sign-in-out-button';
 import './llaminator.scss';
 import { firebaseInit } from './firebase';
 
@@ -43,7 +44,7 @@ window.addEventListener('load', () => {
   const firebaseSyncParam = urlSearchParams.get('firebase-sync');
   const firebaseSync = firebaseSyncParam === 'true' ? firebaseInit() : false;
   if (firebaseSync) {
-    (document.querySelector('#firebase-warning') as HTMLElement).style.display = 'block';
+    (document.querySelector('#firebase-stuff') as HTMLElement).style.display = 'block';
   }
 
   const llaminator = new Llaminator({
