@@ -30,7 +30,7 @@ import { firebaseConfig } from '../firebase';
  * when applicable.
  */
 export class LlamaSignInOutButton extends LitElement {
-  @property({ type: Object }) auth: Auth | null = null;
+  @property({ type: Object }) auth?: Auth;
   @property({ type: String }) stateStr: string = 'In';
   @property({ type: String }) class: string = '';
   @property({ type: String }) user: string = '';
@@ -57,11 +57,10 @@ export class LlamaSignInOutButton extends LitElement {
     const app = initializeApp(firebaseConfig);
     this.auth = getAuth(app);
 
-    const self = this;
-    this.auth.onAuthStateChanged(function(user) {
-      console.log(user);
-      self.stateStr = user ? 'Out' : 'In';
-      self.user = user && user.email ? user.email : '';
+    this.auth.onAuthStateChanged((user) => {
+      console.info(user);
+      this.stateStr = user ? 'Out' : 'In';
+      this.user = user?.email || '';
     });
   }
 
