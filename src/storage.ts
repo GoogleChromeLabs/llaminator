@@ -14,14 +14,15 @@
  *  limitations under the License.
  */
 
+import { getAuth } from 'firebase/auth';
 import * as firebase from 'firebase/storage';
 import { openDB, DBSchema, IDBPDatabase } from 'idb';
 import { v4 as uuidv4 } from 'uuid';
 
-import { firebaseStorage } from './firebase';
+import { firebaseApp, firebaseStorage } from './firebase';
 
 const kMainDBName = 'appDB';
-const kFirebaseDir = 'public';
+const kFirebaseUsersDir = 'users';
 const kRemoteIdPrefix = 'R-';
 const kMaxDownloadSizeBytes = 5 * 1024 * 1024;
 
@@ -65,6 +66,24 @@ interface LlamaDB extends DBSchema {
   };
 }
 
+/**
+ * Constructs a directory for the current user in remote firebase storage.
+ *
+ * @return {string} The user's personal remote firebase storage directory.
+ */
+function getFirebaseUserDir(): string {
+  if (!firebaseApp) {
+    return '';
+  }
+
+  const auth = getAuth(firebaseApp);
+  if (!auth || !auth.currentUser) {
+    return '';
+  }
+
+  return kFirebaseUsersDir + '/' + auth.currentUser.uid;
+}
+
 export class LlamaStorage {
   private db: IDBPDatabase<LlamaDB>;
 
@@ -101,10 +120,10 @@ export class LlamaStorage {
     const tx = this.db.transaction(['blob', 'metadata'], 'readwrite');
 
     let uploadTask: Promise<firebase.UploadResult | null> = Promise.resolve(null);
-    if (firebaseStorage) {
+    if (firebaseStorage && firebaseApp && getAuth(firebaseApp).currentUser) {
       // Note that as bad as this looks, security-wise, there will be server-side protection
-      // against the user modifying unintended locations.
-      const storageRef = firebase.ref(firebaseStorage, kFirebaseDir + '/' + id);
+      // against the user accessing unintended locations.
+      const storageRef = firebase.ref(firebaseStorage, getFirebaseUserDir() + '/' + id);
       const firebaseMeta: firebase.UploadMetadata = {
         contentType: metadata.mimeType,
         customMetadata: metadata,
@@ -128,8 +147,8 @@ export class LlamaStorage {
   async list(): Promise<FileRecord[]> {
     const localMeta = this.db.getAll('metadata');
     let firebaseList: firebase.ListResult | null = null;
-    if (firebaseStorage) {
-      firebaseList = await firebase.listAll(firebase.ref(firebaseStorage, kFirebaseDir));
+    if (firebaseStorage && firebaseApp && getAuth(firebaseApp).currentUser) {
+      firebaseList = await firebase.listAll(firebase.ref(firebaseStorage, getFirebaseUserDir()));
     }
 
     const results = await localMeta;
@@ -181,13 +200,14 @@ export class LlamaStorage {
    *     undefined if unsuccessful.
    */
   private async getRemoteFile(remoteId: FileUniqueID): Promise<Blob | undefined> {
-    if (!firebaseStorage || !remoteId.startsWith(kRemoteIdPrefix)) {
+    if (!firebaseStorage || !remoteId.startsWith(kRemoteIdPrefix) || !firebaseApp ||
+        !getAuth(firebaseApp).currentUser) {
       return undefined;
     }
     remoteId = remoteId.slice(kRemoteIdPrefix.length); // Trim the 'R-' prefix.
 
     // TODO: save a copy locally
-    return firebase.getBlob(firebase.ref(firebaseStorage, kFirebaseDir + '/' + remoteId),
+    return firebase.getBlob(firebase.ref(firebaseStorage, getFirebaseUserDir() + '/' + remoteId),
         kMaxDownloadSizeBytes);
   }
 
@@ -220,7 +240,7 @@ export class LlamaStorage {
 
     // TODO: save a copy locally
     return this.getRemoteFirebaseMetadata(
-        firebase.ref(firebaseStorage, kFirebaseDir + '/' + remoteId));
+        firebase.ref(firebaseStorage, getFirebaseUserDir() + '/' + remoteId));
   }
 
   /**
