@@ -58,7 +58,6 @@ export class LlamaSignInOutButton extends LitElement {
     this.auth = getAuth(app);
 
     this.auth.onAuthStateChanged((user) => {
-      console.info(user);
       this.stateStr = user ? 'Out' : 'In';
       this.user = user?.email || '';
     });

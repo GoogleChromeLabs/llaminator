@@ -77,13 +77,19 @@ export class Llaminator {
   }
 
   /**
-   * Clears the existing content from the container, then renders |this.layout| in it.
+   * Optionally clears the existing content from the container, then renders |this.layout| in it.
+   *
+   * @param {boolean} clear Whether to clear the existing content before rendering the layout. Note
+   *     that this generally should only be set the first time the function is called, because
+   *     removing the layout could mess up Lit's lifecycle stuff.
    */
-  async resetContainer() {
-    const { container } = this.elements;
+  async resetContainer(clear: boolean) {
+    if (clear) {
+      const { container } = this.elements;
 
-    while (container.firstChild) {
-      container.firstChild.remove();
+      while (container.firstChild) {
+        container.firstChild.remove();
+      }
     }
 
     this.layout.refresh(await this.storage);

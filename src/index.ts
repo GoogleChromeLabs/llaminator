@@ -24,7 +24,8 @@ import './components/llama-item';
 import './components/llama-select-fab';
 import './components/llama-sign-in-out-button';
 import './llaminator.scss';
-import { firebaseInit } from './firebase';
+import { firebaseApp, firebaseInit } from './firebase';
+import { getAuth } from 'firebase/auth';
 
 if ('serviceWorker' in navigator && process.env.NODE_ENV !== 'development') {
   window.addEventListener('load', () => {
@@ -52,5 +53,13 @@ window.addEventListener('load', () => {
     select: document.querySelector('#input') as LlamaSelectFab,
   }, layout);
 
-  llaminator.resetContainer();
+  llaminator.resetContainer(true /* clear */);
+
+  if (firebaseSyncParam === 'true' && firebaseApp) {
+    // Once the user logs in (or firebase realizes that the user is already logged in), we need to
+    // refresh the layout to load images from their remote storage bucket directory.
+    getAuth(firebaseApp).onAuthStateChanged(() => {
+      llaminator.resetContainer(false /* clear */);
+    });
+  }
 });

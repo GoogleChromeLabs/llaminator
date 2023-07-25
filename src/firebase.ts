@@ -22,7 +22,7 @@ import { getStorage, FirebaseStorage } from 'firebase/storage';
 // TODO: the config should probably be in a separate JSON file.
 export const firebaseConfig = null;
 
-let app: FirebaseApp | null = null;
+export let firebaseApp: FirebaseApp | null = null;
 export let firebaseStorage: FirebaseStorage | null = null;
 
 /**
@@ -31,7 +31,7 @@ export let firebaseStorage: FirebaseStorage | null = null;
  * @return {boolean} Whether initialization was successful.
  */
 export function firebaseInit(): boolean {
-  app = firebaseConfig ? initializeApp(firebaseConfig) : null;
-  firebaseStorage = app ? getStorage(app) : null;
+  firebaseApp = firebaseConfig ? initializeApp(firebaseConfig) : null;
+  firebaseStorage = firebaseApp ? getStorage(firebaseApp) : null;
   return !!firebaseStorage;
 }
