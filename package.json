@@ -32,7 +32,7 @@
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.5.0",
     "jest": "^27.4.5",
-    "jest-puppeteer": "^6.0.3",
+    "jest-puppeteer": "^10.0.1",
     "mini-css-extract-plugin": "^2.5.3",
     "puppeteer": "^13.1.2",
     "sass": "^1.45.0",
