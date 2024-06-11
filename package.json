@@ -50,7 +50,7 @@
     "@material/icon-button": "^13.0.0",
     "@material/mwc-fab": "^0.25.3",
     "@material/top-app-bar": "^13.0.0",
-    "firebase": "^9.16.0",
+    "firebase": "^10.12.2",
     "firebaseui": "^6.0.2",
     "idb": "^7.0.0",
     "lit": "^2.0.2",
