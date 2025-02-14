@@ -42,7 +42,7 @@
     "webpack-bundle-analyzer": "^4.5.0",
     "webpack-cli": "^4.9.1",
     "webpack-dev-server": "^4.6.0",
-    "workbox-webpack-plugin": "^6.4.2"
+    "workbox-webpack-plugin": "^7.3.0"
   },
   "dependencies": {
     "@material/card": "^13.0.0",
