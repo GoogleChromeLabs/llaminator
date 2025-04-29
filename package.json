@@ -34,7 +34,7 @@
     "jest": "^27.4.5",
     "jest-puppeteer": "^11.0.0",
     "mini-css-extract-plugin": "^2.5.3",
-    "puppeteer": "^22.11.2",
+    "puppeteer": "^22.15.0",
     "sass": "^1.45.0",
     "sass-loader": "^12.4.0",
     "ts-loader": "^9.2.6",
