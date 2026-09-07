@@ -22,5 +22,5 @@ Once all that is out of the way, you can finally deploy the Firebase Storage
 rules with `firebase deploy`. Yay.
 
 But we're not done yet! You also have to set up a CORS configuration by running
-the `gsutil` command shown
+the `gcloud storage` command shown
 [here](https://firebase.google.com/docs/storage/web/download-files#cors_configuration).
